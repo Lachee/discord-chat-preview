@@ -1,16 +1,22 @@
 import dotenv from 'dotenv';
+dotenv.config();
 
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import { createRouter } from './index.js';
 import express from 'express';
-import expressWs from "express-ws";
+import expressWebSocket from "express-ws";
 
 
-const app = express();
-expressWs(app);
-
-dotenv.config();
-
+// Create the discord client
 const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
-const router = createRouter(client, []);
-app.use('/chat', router);
+client.login(process.env.BOT_TOKEN);
+
+// Create the express client
+const app   = express();
+const port  = process.env.EXPRESS_PORT || 3000;
+expressWebSocket(app);    
+app.use('/chat', createRouter(client));
+app.listen(port, () => {
+    console.log(`Application is listenting too http://localhost:${port}`);
+});
+

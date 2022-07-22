@@ -1,6 +1,7 @@
-import { Router as expressRouter } from "express";
+import { Router as expressRouter, static as expressStatic } from "express";
 import expressWs from "express-ws";
 import { Client } from "discord.js";
+import path from 'path';
 
 /**
  * Creates an express router that has the endpoints for live chat
@@ -23,19 +24,36 @@ export function createRouter(discord, channels = []) {
         broadcast({ origin: 'discord', data: message, content: '' });
     });
 
+    //=== File Routes
+    // Default, lets return the file
+    router.get('/*.*', (req, res, next) => {
+        console.log('sending', req.path);
+        sendFile(res, req.path);
+    });
+
+    //=== Status Route
+    // Default router with information about our configuration
+    router.get('/stats', (req, res, next) => {
+        res.json({
+            connections:    connections.length,
+            channels:       channels,
+        });
+    });
+
+    //=== Channel Serve route
     // Gets a visual room that will connect to the ws for live messages
     router.get(`/:channel`, (req, res, next) => {
-        if (channel.length && channels.indexOf(req.params.channel) < 0) {
+        if (channels.length && channels.indexOf(req.params.channel) < 0) {
             res.send('bad request: unkown channel');
             return;
         }
-
-        res.send('ok');
+        res.setHeader('X-Channel', req.params.channel);
+        sendFile(res, 'index.html');
     });
 
     // Create the websocket endpoint
     router.ws(`/:channel`,  function(ws, req) {
-        if (channel.length && channels.indexOf(req.params.channel) < 0) {
+        if (channels.length && channels.indexOf(req.params.channel) < 0) {
             ws.send('bad request: unkown channel');
             ws.close();
             return;
@@ -54,4 +72,14 @@ export function createRouter(discord, channels = []) {
     });
 
     return router;
+}
+
+/**
+ * Sends a file
+ * @param {Response} res 
+ * @param {String} filename 
+ */
+function sendFile(res, filename)
+{
+    res.sendFile(filename, { root: path.dirname('dist') + '/dist' });
 }
