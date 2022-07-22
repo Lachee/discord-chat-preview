@@ -40,7 +40,10 @@ export function createRouter(discord, channels = []) {
     discord.on('messageCreate', async (message) => {
         if (message.author.bot) return;
         const minimalMsg    = await convertDiscordMessage(message);
-        connections.forEach(connection => connection.send('discord', minimalMsg, minimalMsg.content));
+        connections.forEach(connection => {
+            if (connection.channelId == message.channelId) 
+                connection.send('discord', minimalMsg, minimalMsg.content);
+        });
     });
 
     
@@ -55,7 +58,7 @@ export function createRouter(discord, channels = []) {
         }
         
         // Add the connection
-        const connection = new Connection(ws);
+        const connection = new Connection(ws, req.params.channel);
         connections.push(connection);
                 
         // On close remove the connection
@@ -115,12 +118,14 @@ const CONNECTION_MIN_PONGTIME = 1000;
 const CONNECTION_MAX_PONGTIME = 3000;
 class Connection {
     
+    channelId;
     ws;
     ping;
     pong;
 
-    constructor(ws) {
+    constructor(ws, channel) {
         this.ws = ws;
+        this.channelId = channel;
         this.ping = Date.now() + CONNECTION_MIN_PONGTIME;
         this.pong = this.ping + CONNECTION_MAX_PONGTIME;
     }
