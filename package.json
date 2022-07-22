@@ -1,6 +1,6 @@
 {
   "name": "discord-chat-preview",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Live Channel Preview for Discord",
   "main": "src/index.js",
   "type": "module",

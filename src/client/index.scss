@@ -43,7 +43,11 @@ body {
 
         // Content
         .content {
-            
+            a { 
+                color: $color-fuchsia;
+                font-style: italic;
+            }
+
             .markdown {
                 // Highlight mentions
                 .mention, .mention a {
@@ -59,7 +63,31 @@ body {
                     .d-emoji { height: 4em; }
                 }
             }
-                        
+                      
+            .reactions {
+                .reaction {
+                    float: left;
+                    padding: 0px 5px;
+                    border-radius: 5px;
+                    border: 1px solid $color-blurple;
+                    background: transparentize($color-blurple, 1-0.30);
+                    color: $color-off-white;
+                    margin-right: 0.25em;
+                }
+                .emote {
+                    height: 1em;
+                    width: 1em;
+                    vertical-align: middle;
+                    margin-right: 0.25em;
+                    margin-top: -2px;
+                }
+                .count {
+                    /* float: left; */
+                    text-align: right;
+                    margin: auto;
+                }
+            }
+
             .d-emoji {
                 height: 1.5em;
                 vertical-align: middle;

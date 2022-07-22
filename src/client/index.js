@@ -1,7 +1,7 @@
 import './index.scss';
 import $ from "cash-dom";
 import  { toHTML as markdown } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
-import { tagUser, tagChannel, tagRole } from './markdown.js';
+import { tagUser, tagChannel, tagRole, tagEmote } from './markdown.js';
 
 const LOG_PING_PONG = false;
 
@@ -38,8 +38,22 @@ function updateMessage(message) {
 }
 function deleteMessage(message) {}
 
-function addReaction(reaction) {}
-function removeReaction(reaction) {}
+function updateReaction(reaction) {
+    const {id, emote, count} = reaction;
+
+
+    // If it doesnt exist then we will add one
+    let query = $(`#${id}`).find('.content .reactions').find(`[data-id="${emote.identifier}"]`);
+    if (count == 0) {
+        query.remove();
+    } else {
+        if (query.length == 0) {        
+            $(`<div class="reaction" data-id="${emote.identifier}">${tagEmote(emote)}<span class="count">1</span></div>`).appendTo($(`#${id}`).find('.content .reactions'));
+            query = $(`#${id}`).find('.content .reactions').find(`[data-id="${emote.identifier}"]`); 
+        }
+        query.find('.count').text(count);
+    }
+}
 
 function initializeWebsocket() {
     const protocol = 'ws';
@@ -79,10 +93,8 @@ function initializeWebsocket() {
                         deleteMessage(data);
                         break;
                     case 'reaction.add':
-                        addReaction(data);
-                        break;
                     case 'reaction.remove':
-                        removeReaction(data);
+                        updateReaction(data);
                         break;
                 }
                 break;

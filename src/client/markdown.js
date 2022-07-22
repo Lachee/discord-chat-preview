@@ -19,3 +19,11 @@ export function tagRole(id, roles) {
     const backgroundColor = color + "38";
     return `<span class='mention role' style='color: ${color}; background-color: ${backgroundColor};'>@${name}</span>`;
 }
+
+export function tagEmote(emote) {
+    const { url, name } = emote;
+    if (url == null) { 
+        return `<span class='emoji'>${name}</span>`;
+    }
+    return `<img src='${url}' class='emote'></img>`;
+}
