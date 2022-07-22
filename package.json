@@ -19,7 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.0.3",
+    "discord.js": "13.5.1",
     "express": "^4.18.1",
     "express-ws": "^5.0.2"
   },
