@@ -1,8 +1,8 @@
 {
   "name": "discord-live-chat",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Live Chat for Discord",
-  "main": "src/test.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
     "build-client": "npx webpack --mode production",
     "watch-client": "npx webpack --mode development --watch",
     "build-server": "",
-    "watch-server": "nodemon "
+    "watch-server": "nodemon src/bot.js"
   },
   "repository": {
     "type": "git",
