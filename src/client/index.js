@@ -36,7 +36,10 @@ function updateMessage(message) {
         $(`#${id}`).find('.content > .markdown').addClass('image-only');
     
 }
-function deleteMessage(message) {}
+function deleteMessage(message) {
+    const {id} = message;
+    $(`#${id}`).remove();
+}
 
 function updateReaction(reaction) {
     const {id, emote, count} = reaction;
