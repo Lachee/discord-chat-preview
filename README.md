@@ -20,7 +20,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Import discord, express, and express-ws
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import { Client, Intents, Partials } from 'discord.js';
 import express from 'express';
 import expressWebSocket from "express-ws";
 
@@ -31,10 +31,10 @@ import { createRouter } from 'discord-chat-preview';
 // Create the discord client
 const client = new Client({ 
     intents: [
-        GatewayIntentBits.Guilds, 
-        GatewayIntentBits.MessageContent,           // This is REQUIRED
-        GatewayIntentBits.GuildMessages,            // This is REQUIRED
-        GatewayIntentBits.GuildMessageReactions,    // This is optional for reactions
+        Intents.FLAGS.GUILDS, 
+        Intents.FLAGS.MESSAGE_CONTENT,           // This is REQUIRED
+        Intents.FLAGS.GUILD_MESSAGES,            // This is REQUIRED
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,    // This is optional for reactions
     ], 
     partials: [Partials.GuildMember, Partials.Message] 
 });
