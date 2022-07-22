@@ -1,6 +1,10 @@
 import { Router as expressRouter } from "express";
 import { Client, Message, MessageReaction, User, MessageMentions } from "discord.js";
+
 import path from 'path';
+import {fileURLToPath} from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Converts a Discord.JS message into minimal information to render on a webpage
@@ -303,5 +307,5 @@ class Connection {
  */
 function sendFile(res, filename)
 {
-    res.sendFile(filename, { root: path.dirname('dist') + '/dist' });
+    res.sendFile(filename, { root: __dirname + '/../dist' });
 }
