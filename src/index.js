@@ -1,6 +1,6 @@
 import { Router as expressRouter, static as expressStatic } from "express";
 import expressWs from "express-ws";
-import { Client, Message } from "discord.js";
+import { Client, Message, MessageReaction, User } from "discord.js";
 import path from 'path';
 
 /**
@@ -9,7 +9,49 @@ import path from 'path';
  */
 async function convertDiscordMessage(message) {
     return { 
-        content: message.content
+        id:         message.id,
+        type:       message.type,
+        content:    message.content,
+        createdAt:  message.createdAt,
+        editedAt:   message.editedAt,
+        // reactions:  message.reactions.cache.map(r => convertDiscordMessageReaction(r, null)),
+        member:     {
+            id:     message.member.id,
+            name:   message.member.displayName,
+            color:  message.member.displayHexColor,
+            avatar: message.member.displayAvatarURL(),
+        }
+
+    }
+}
+
+/**
+ * 
+ * @param {MessageReaction} messageReaction 
+ * @param {User} user
+ */
+async function convertDiscordMessageReaction(messageReaction, user) {
+    return {
+        id: messageReaction.message.id,
+        count: messageReaction.count,
+        emote: convertDiscordEmoji(messageReaction.emoji),
+        member: user ? { id: user.id } : null,
+    }
+}
+
+/**
+ * 
+ * @param {GuildEmoji|ReactionEmoji} emoji 
+ * @returns 
+ */
+async function convertDiscordEmoji(emoji) {
+    return {
+        id: emoji.id,
+        identifier: emoji.identifier,
+
+        name: emoji.name,
+        animated: emoji.animated,
+        url: emoji.url,
     }
 }
 
@@ -39,13 +81,50 @@ export function createRouter(discord, channels = []) {
     // Message create, we will broadcast to each and every valid object
     discord.on('messageCreate', async (message) => {
         if (message.author.bot) return;
-        const minimalMsg    = await convertDiscordMessage(message);
+        const converted    = await convertDiscordMessage(message);
         connections.forEach(connection => {
             if (connection.channelId == message.channelId) 
-                connection.send('discord', minimalMsg, minimalMsg.content);
+                connection.send('discord', converted, 'message.create');
         });
     });
 
+    
+    // Message create, we will broadcast to each and every valid object
+    discord.on('messageUpdate', async (message) => {
+        if (!message.author || message.author.bot) return;
+        const converted    = await convertDiscordMessage(message);
+        connections.forEach(connection => {
+            if (connection.channelId == message.channelId) 
+                connection.send('discord', converted, 'message.edit');
+        });
+    });
+    
+
+    // Message create, we will broadcast to each and every valid object
+    discord.on('messageDelete', async (message) => {
+        connections.forEach(connection => {
+            if (connection.channelId == message.channelId) 
+                connection.send('discord',  { id: message.id }, 'message.delete');
+        });
+    });
+
+    discord.on('messageReactionAdd', async (messageReaction, user) => {
+        if (user.bot) return;
+        const converted = await convertDiscordMessageReaction(messageReaction, user);
+        connections.forEach(connection => {
+            if (connection.channelId == messageReaction.message.channelId) 
+                connection.send('discord',  converted, 'reaction.add');
+        });
+    });
+
+    discord.on('messageReactionRemove', async (messageReaction, user) => {
+        if (user.bot) return;
+        const converted = await convertDiscordMessageReaction(messageReaction, user);
+        connections.forEach(connection => {
+            if (connection.channelId == messageReaction.message.channelId) 
+                connection.send('discord',  converted, 'reaction.remove');
+        });
+    });
     
     // Create the websocket endpoint
     router.ws(`/:channel`,  function(ws, req) {

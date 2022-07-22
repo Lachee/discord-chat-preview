@@ -31,7 +31,7 @@ function initializeWebsocket() {
                 break;
 
             case 'discord':
-                console.log('[DISCORD]', data);
+                console.log('[DISCORD]', content, data);
                 pushMessage(data);
                 break;
 
