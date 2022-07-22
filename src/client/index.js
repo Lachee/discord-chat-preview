@@ -1,15 +1,46 @@
 import './index.scss';
 import $ from "cash-dom";
+import  { toHTML as markdown } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
+import { tagUser, tagChannel, tagRole } from './markdown.js';
 
 const LOG_PING_PONG = false;
 
-function pushMessage(message) {
+let container = null;
+let currentSocket = null;
 
+function createMessage(message) {
+    const msg = $(`<div class="message" id="${message.id}"></div>`).appendTo(container).get(0);
+    $('<div class="name"></div><div class="content"></div><div class="reactions"></div>').appendTo(msg);
+    updateMessage(message);
 }
+function updateMessage(message) {
+    const { id, member, content, createdAt } = message;
+    const markdownOptions = {
+        discordCallback: {
+            user: ({id})    => tagUser(id, message.mentions?.members),
+            channel: ({id}) => tagChannel(id, message.mentions?.channels),
+            role: ({id})    => tagRole(id, message.mentions?.roles),
+        }
+    }
+
+    $(`#${id}`).find('.name')
+        .text(member.name)
+        .css({ color: member.color === '#000000' ? 'inherit' : member.color });
+
+    $(`#${id}`).find('.content')
+        .html(markdown(content, markdownOptions));
+        
+}
+function deleteMessage(message) {}
+
+function addReaction(reaction) {}
+function removeReaction(reaction) {}
 
 function initializeWebsocket() {
     const protocol = 'ws';
     const socket = new WebSocket(`${protocol}://${window.location.host}${window.location.pathname}`);
+    currentSocket = socket;
+
     socket.addEventListener('open', function(event) {
         console.log('socket has open');
     });
@@ -32,7 +63,23 @@ function initializeWebsocket() {
 
             case 'discord':
                 console.log('[DISCORD]', content, data);
-                pushMessage(data);
+                switch(content) {
+                    case 'message.create':
+                        createMessage(data);
+                        break;
+                    case 'message.edit':
+                        updateMessage(data);
+                        break;
+                    case 'message.delete':
+                        deleteMessage(data);
+                        break;
+                    case 'reaction.add':
+                        addReaction(data);
+                        break;
+                    case 'reaction.remove':
+                        removeReaction(data);
+                        break;
+                }
                 break;
 
             default:
@@ -49,6 +96,10 @@ function initializeWebsocket() {
     });
 }
 
+function initializeChatbox() {
+    container = $('<div id="chat" class="chat"></div>').appendTo(document.body).get(0);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     
@@ -56,5 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (params.has('transparent'))
         $('body').addClass('transparent');
 
+    initializeChatbox();
     initializeWebsocket();
 });

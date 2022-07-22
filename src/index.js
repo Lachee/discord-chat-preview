@@ -1,13 +1,13 @@
-import { Router as expressRouter, static as expressStatic } from "express";
-import expressWs from "express-ws";
-import { Client, Message, MessageReaction, User } from "discord.js";
+import { Router as expressRouter } from "express";
+import { Client, Message, MessageReaction, User, MessageMentions } from "discord.js";
 import path from 'path';
 
 /**
  * Converts a Discord.JS message into minimal information to render on a webpage
  * @param {Message<boolean>} message 
  */
-async function convertDiscordMessage(message) {
+function convertDiscordMessage(message) {
+    if (message == null) return null;
     return { 
         id:         message.id,
         type:       message.type,
@@ -15,14 +15,70 @@ async function convertDiscordMessage(message) {
         createdAt:  message.createdAt,
         editedAt:   message.editedAt,
         // reactions:  message.reactions.cache.map(r => convertDiscordMessageReaction(r, null)),
-        member:     {
-            id:     message.member.id,
-            name:   message.member.displayName,
-            color:  message.member.displayHexColor,
-            avatar: message.member.displayAvatarURL(),
-        }
-
+        member:   convertDiscordMember(message.member), 
+        mentions: convertDiscordMentions(message.mentions)
     }
+}
+
+function convertDiscordMember(member) {
+    if (member == null) return null;
+    return {
+        id:     member.id,
+        name:   member.displayName,
+        color:  member.displayHexColor,
+        avatar: member.displayAvatarURL(),
+    };
+}
+
+function convertDiscordUser(user) {
+    if (user == null) return null;
+    return {
+        id:     user.id,
+        name:   user.name,
+        color: '#000000',
+        avatar: user.avatarURL()
+    };
+}
+
+function convertDiscordRole(role) {
+    if (role == null) return null;
+    return {
+        id:         role.id,
+        name:       role.name,
+        color:      role.hexColor,
+        emoji:      role.unicodeEmoji,
+        icon:       role.iconURL(),
+    };
+}
+
+function convertDiscordChannel(channel) {
+    if (channel == null) return null;
+    return {
+        id:     channel.id,
+        name:   channel.name,
+        nsfw:   channel.nsfw,
+        url:    channel.url,
+    };
+}
+
+
+/**
+ * 
+ * @param {MessageMentions} mentions 
+ * @returns 
+ */
+function convertDiscordMentions(mentions) {
+    if (mentions == null) return null;
+    let members = mentions.members ? mentions.members.map(member => convertDiscordMember(member)) : [];
+    let users = mentions.users ? mentions.users.map(user => convertDiscordUser(user)) : [];
+    let roles = mentions.roles ? mentions.roles.map(role => convertDiscordRole(role)) : [];
+    let channels = mentions.channels ? mentions.channels.map(channel => convertDiscordChannel(channel)) : [];
+
+    return {
+        members: members.concat(users.filter(u => !members.filter(m => m.id == u.id).length)),
+        channels: channels,
+        roles: roles,
+    };
 }
 
 /**
@@ -30,7 +86,8 @@ async function convertDiscordMessage(message) {
  * @param {MessageReaction} messageReaction 
  * @param {User} user
  */
-async function convertDiscordMessageReaction(messageReaction, user) {
+function convertDiscordMessageReaction(messageReaction, user) {
+    if (messageReaction == null) return messageReaction;
     return {
         id: messageReaction.message.id,
         count: messageReaction.count,
@@ -44,7 +101,8 @@ async function convertDiscordMessageReaction(messageReaction, user) {
  * @param {GuildEmoji|ReactionEmoji} emoji 
  * @returns 
  */
-async function convertDiscordEmoji(emoji) {
+function convertDiscordEmoji(emoji) {
+    if (emoji == null) return null;
     return {
         id: emoji.id,
         identifier: emoji.identifier,

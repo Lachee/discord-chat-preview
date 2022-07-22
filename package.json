@@ -26,6 +26,7 @@
   "devDependencies": {
     "cash-dom": "^8.1.1",
     "css-loader": "^6.7.1",
+    "discord-markdown": "^2.5.1",
     "dotenv": "^16.0.1",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.53.0",
