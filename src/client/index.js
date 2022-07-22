@@ -1,4 +1,6 @@
 import './index.scss';
+import './hljs.scss';
+
 import $ from "cash-dom";
 import  { toHTML as markdown } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
 import { tagUser, tagChannel, tagRole, tagEmote } from './markdown.js';
@@ -117,8 +119,8 @@ function initializeWebsocket() {
 }
 
 function initializeChatbox() {
+    $('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>').appendTo(document.head);
     container = $('<table id="chat" class="chat"></table>').appendTo(document.body).get();
-
 }
 
 document.addEventListener('DOMContentLoaded', () => {

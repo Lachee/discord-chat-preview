@@ -6,9 +6,11 @@ $color-red: #ed4245;
 $color-white: #fff;
 $color-off-white: #dcddde;
 $color-black: #000;
+$color-off-black: #1e2124;
+
 $color-light-gray: #424549;
 $color-gray: #36393e;
-$color-dark-gray: #1e2124;
+$color-dark-gray: #292b2f;
 
 $color-primary: $color-blurple;
 $color-secondary: $color-light-gray;
@@ -50,6 +52,21 @@ body {
             }
 
             .markdown {
+                // Highlight code
+                pre, code
+                {
+                    background: $color-dark-gray;
+                    padding: 2px;
+                    border-radius: 3px;
+                }
+
+                pre 
+                {
+                    width: 75vw;
+                    border: 1px solid $color-off-black;
+                    padding: 4px;
+                }
+
                 // Highlight mentions
                 .mention, .mention a {
                     border-radius: 3px;
