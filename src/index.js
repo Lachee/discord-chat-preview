@@ -153,11 +153,11 @@ export function createRouter(discord, channels = []) {
 
     
     // Message create, we will broadcast to each and every valid object
-    discord.on('messageUpdate', async (message) => {
-        if (!message.author || message.author.bot) return;
-        const converted    = await convertDiscordMessage(message);
+    discord.on('messageUpdate', async (oldMessage, newMessage) => {
+        if (!newMessage.author || newMessage.author.bot) return;
+        const converted    = await convertDiscordMessage(newMessage);
         connections.forEach(connection => {
-            if (connection.channelId == message.channelId) 
+            if (connection.channelId == newMessage.channelId) 
                 connection.send('discord', converted, 'message.edit');
         });
     });
