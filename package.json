@@ -1,7 +1,7 @@
 {
-  "name": "discord-live-chat",
+  "name": "discord-chat-preview",
   "version": "0.1.0",
-  "description": "Live Chat for Discord",
+  "description": "Live Channel Preview for Discord",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
