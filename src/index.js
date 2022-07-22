@@ -120,6 +120,7 @@ function convertDiscordEmoji(emoji) {
 /**
  * Creates an express router that has the endpoints for live chat
  * @param {Client} discord 
+ * @returns {Router} express router
  */
 export function createRouter(discord, channels = []) {
     const router = expressRouter();
