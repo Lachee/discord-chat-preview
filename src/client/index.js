@@ -10,10 +10,17 @@ const LOG_PING_PONG = false;
 let container = null;
 let currentSocket = null;
 
+function autoscroll() {
+    window.scrollTo({
+        top: document.body.clientHeight * 100,
+        behavior: 'smooth'
+    });
+}
+
 function createMessage(message) {
     const msg = $(`<tr class="message" id="${message.id}"></tr>`).appendTo(container).get(0);
     $('<td class="name"></td><td class="content"><div class="markdown"></div><div class="reactions"></div></td>').appendTo(msg);
-    updateMessage(message);
+    updateMessage(message);    
 }
 function updateMessage(message) {
     const { id, member, content, createdAt } = message;
@@ -36,11 +43,13 @@ function updateMessage(message) {
     $(`#${id}`).find('.content > .markdown').removeClass('image-only');
     if ($(`#${id}`).find('.content > .markdown').text().trim().length == 0)
         $(`#${id}`).find('.content > .markdown').addClass('image-only');
-    
+
+    autoscroll();
 }
 function deleteMessage(message) {
     const {id} = message;
     $(`#${id}`).remove();
+    autoscroll();
 }
 
 function updateReaction(reaction) {
@@ -58,6 +67,8 @@ function updateReaction(reaction) {
         }
         query.find('.count').text(count);
     }
+    
+    autoscroll();
 }
 
 function initializeWebsocket() {

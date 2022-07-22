@@ -48,6 +48,8 @@ body {
 
         // Content
         .content {
+            overflow-wrap: anywhere;
+            
             a { 
                 color: $color-fuchsia;
                 font-style: italic;
