@@ -4,6 +4,7 @@ $color-yellow: #fee75c;
 $color-fuchsia: #eb459e;
 $color-red: #ed4245;
 $color-white: #fff;
+$color-off-white: #dcddde;
 $color-black: #000;
 $color-light-gray: #424549;
 $color-gray: #36393e;
@@ -11,11 +12,12 @@ $color-dark-gray: #1e2124;
 
 $color-primary: $color-blurple;
 $color-secondary: $color-light-gray;
-$color-background: $color-dark-gray;
+$color-background: $color-gray;
 $color-success: $color-green;
 $color-warning: $color-yellow;
 $color-danger: $color-red;
 $color-info: $color-fuchsia;
+$color-text: $color-off-white;
 
 * {
     padding: 0;
@@ -23,6 +25,45 @@ $color-info: $color-fuchsia;
 }
 
 body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: $color-text;
+
     background-color: $color-background;
     &.transparent { background-color: transparent; }
+    margin: 10px;
+}
+
+.chat {
+    line-height: 1.5em;
+    .message {
+        // Name
+        .name {
+            padding-right: 1em;
+        }
+
+        // Content
+        .content {
+            
+            .markdown {
+                // Highlight mentions
+                .mention, .mention a {
+                    border-radius: 3px;
+                    background: transparentize($color-blurple, 1-0.30);
+                    color: $color-off-white;
+                    padding: 5px;
+                    font-weight: bold;
+                }
+
+                // If we are only images make it bigger
+                &.image-only {
+                    .d-emoji { height: 4em; }
+                }
+            }
+                        
+            .d-emoji {
+                height: 1.5em;
+                vertical-align: middle;
+            }
+        }
+    }
 }

@@ -16,6 +16,6 @@ export function tagRole(id, roles) {
     const filtered = roles.filter(u => u.id === id);
     const name = (filtered.length ? filtered[0].name : id);
     const color = (filtered.length ? filtered[0].color : '5865f2');
-    const backgroundColor = color + "AA";
+    const backgroundColor = color + "38";
     return `<span class='mention role' style='color: ${color}; background-color: ${backgroundColor};'>@${name}</span>`;
 }

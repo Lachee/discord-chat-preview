@@ -9,8 +9,8 @@ let container = null;
 let currentSocket = null;
 
 function createMessage(message) {
-    const msg = $(`<div class="message" id="${message.id}"></div>`).appendTo(container).get(0);
-    $('<div class="name"></div><div class="content"></div><div class="reactions"></div>').appendTo(msg);
+    const msg = $(`<tr class="message" id="${message.id}"></tr>`).appendTo(container).get(0);
+    $('<td class="name"></td><td class="content"><div class="markdown"></div><div class="reactions"></div></td>').appendTo(msg);
     updateMessage(message);
 }
 function updateMessage(message) {
@@ -27,9 +27,14 @@ function updateMessage(message) {
         .text(member.name)
         .css({ color: member.color === '#000000' ? 'inherit' : member.color });
 
-    $(`#${id}`).find('.content')
+    $(`#${id}`).find('.content > .markdown')
         .html(markdown(content, markdownOptions));
         
+    // If the content is only image tags then apply
+    $(`#${id}`).find('.content > .markdown').removeClass('image-only');
+    if ($(`#${id}`).find('.content > .markdown').text().trim().length == 0)
+        $(`#${id}`).find('.content > .markdown').addClass('image-only');
+    
 }
 function deleteMessage(message) {}
 
@@ -97,7 +102,8 @@ function initializeWebsocket() {
 }
 
 function initializeChatbox() {
-    container = $('<div id="chat" class="chat"></div>').appendTo(document.body).get(0);
+    container = $('<table id="chat" class="chat"></table>').appendTo(document.body).get();
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {
