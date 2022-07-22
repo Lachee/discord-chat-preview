@@ -1,4 +1,21 @@
-$background: white;
+$color-blurple: #5865f2;
+$color-green: #57f287;
+$color-yellow: #fee75c;
+$color-fuchsia: #eb459e;
+$color-red: #ed4245;
+$color-white: #fff;
+$color-black: #000;
+$color-light-gray: #424549;
+$color-gray: #36393e;
+$color-dark-gray: #1e2124;
+
+$color-primary: $color-blurple;
+$color-secondary: $color-light-gray;
+$color-background: $color-dark-gray;
+$color-success: $color-green;
+$color-warning: $color-yellow;
+$color-danger: $color-red;
+$color-info: $color-fuchsia;
 
 * {
     padding: 0;
@@ -6,5 +23,6 @@ $background: white;
 }
 
 body {
-    background-color: $background;
+    background-color: $color-background;
+    &.transparent { background-color: transparent; }
 }

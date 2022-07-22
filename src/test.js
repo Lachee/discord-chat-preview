@@ -8,8 +8,14 @@ import expressWebSocket from "express-ws";
 
 
 // Create the discord client
-const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
-client.login(process.env.BOT_TOKEN);
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds, 
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessages
+    ], 
+    partials: [Partials.GuildMember, Partials.Message] 
+});
 
 // Create the express client
 const app   = express();
@@ -18,5 +24,6 @@ expressWebSocket(app);
 app.use('/chat', createRouter(client));
 app.listen(port, () => {
     console.log(`Application is listenting too http://localhost:${port}`);
+    client.login(process.env.BOT_TOKEN);
 });
 

@@ -1,7 +1,17 @@
 import { Router as expressRouter, static as expressStatic } from "express";
 import expressWs from "express-ws";
-import { Client } from "discord.js";
+import { Client, Message } from "discord.js";
 import path from 'path';
+
+/**
+ * Converts a Discord.JS message into minimal information to render on a webpage
+ * @param {Message<boolean>} message 
+ */
+async function convertDiscordMessage(message) {
+    return { 
+        content: message.content
+    }
+}
 
 /**
  * Creates an express router that has the endpoints for live chat
@@ -12,18 +22,65 @@ export function createRouter(discord, channels = []) {
     if (router.ws === undefined)
         throw new Error('express does not have the WS enabled');
 
+    /** @type {Connection[]} list of valid connections */
     let connections = [];
-    function broadcast(msg) {
-        connections.forEach(ws => {
-            ws.send(msg);
+    
+    // Check to insure the messages have ponged
+    setInterval(() => {
+        connections.forEach(connection => {
+            if (!connection.isValid()) {
+                console.log('terminating connection because it did not respond in time');
+                connection.send('close', {}, 'did not respond to pong in time!');
+                connection.ws.close();
+            }
         });
-    }
+    }, CONNECTION_MIN_PONGTIME);
 
-    discord.on('message', async (message) => {
+    // Message create, we will broadcast to each and every valid object
+    discord.on('messageCreate', async (message) => {
         if (message.author.bot) return;
-        broadcast({ origin: 'discord', data: message, content: '' });
+        const minimalMsg    = await convertDiscordMessage(message);
+        connections.forEach(connection => connection.send('discord', minimalMsg, minimalMsg.content));
     });
 
+    
+    // Create the websocket endpoint
+    router.ws(`/:channel`,  function(ws, req) {
+        console.log('new channel ws');
+        if (channels.length && channels.indexOf(req.params.channel) < 0) {
+            console.log('bad request for WS, dont know jack shit');
+            ws.send('bad request: unkown channel');
+            ws.close();
+            return;
+        }
+        
+        // Add the connection
+        const connection = new Connection(ws);
+        connections.push(connection);
+                
+        // On close remove the connection
+        ws.on('close', function(msg) {
+            connections = connections.filter(con => con.ws != ws);
+            console.log("connection lost: ", connections.length);
+        });
+
+        // On a message, we will send a pong back and tell them when we expect them.
+        ws.on('message', function(msg) {
+            if (Date.now() < connection.ping) {
+                console.log('terminating connection because it responded too fast!');
+                connection.send('close', {}, 'connection responding too fast!');
+                connection.ws.close();
+            } else {
+                // Otherwise just ping pong them again
+                connection.pingPong();
+            }
+        })
+
+        connection.pingPong();
+        console.log('connection established: ', connections.length);
+    });
+
+    
     //=== File Routes
     // Default, lets return the file
     router.get('/*.*', (req, res, next) => {
@@ -51,27 +108,50 @@ export function createRouter(discord, channels = []) {
         sendFile(res, 'index.html');
     });
 
-    // Create the websocket endpoint
-    router.ws(`/:channel`,  function(ws, req) {
-        if (channels.length && channels.indexOf(req.params.channel) < 0) {
-            ws.send('bad request: unkown channel');
-            ws.close();
-            return;
-        }
-
-        // Add the connection
-        connections.push(ws);
-        ws.send({ origin: 'system', data: null, content: 'connected to channel' });
-        console.log("new websocket connection created: ", connections.length);
-
-        // On close remove the connection
-        ws.on('close', function(msg) {
-            connections = connections.filter(con => con != ws);
-            console.log("connection lost: ", connections.length);
-        });
-    });
-
     return router;
+}
+
+const CONNECTION_MIN_PONGTIME = 1000;
+const CONNECTION_MAX_PONGTIME = 3000;
+class Connection {
+    
+    ws;
+    ping;
+    pong;
+
+    constructor(ws) {
+        this.ws = ws;
+        this.ping = Date.now() + CONNECTION_MIN_PONGTIME;
+        this.pong = this.ping + CONNECTION_MAX_PONGTIME;
+    }
+
+    /**
+     * Sends a payload to the connection
+     * @param {String} origin 
+     * @param {any} data 
+     * @param {String} content 
+     */
+    send(origin, data, content = '') {
+        this.ws.send(JSON.stringify({origin, data, content}));
+    }
+
+    /** Sends a new ping to the client with the expected response time */
+    pingPong() {        
+        this.ping = Date.now() + CONNECTION_MIN_PONGTIME;
+        this.pong = this.ping + Math.floor(CONNECTION_MIN_PONGTIME + (Math.random() * CONNECTION_MAX_PONGTIME));
+        
+        const pingPong = { ping: this.ping, pong: this.pong };
+        this.send('ping', pingPong, 'Ping! 🏓');
+        return pingPong;
+    }
+
+    /**
+     * Returns if the connection is valid
+     * @returns {Boolean} validity of connection
+     */
+    isValid() {
+        return this.ws && Date.now() < this.pong;
+    }
 }
 
 /**
