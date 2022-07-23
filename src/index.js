@@ -19,8 +19,9 @@ function convertDiscordMessage(message) {
         createdAt:  message.createdAt,
         editedAt:   message.editedAt,
         // reactions:  message.reactions.cache.map(r => convertDiscordMessageReaction(r, null)),
-        member:   convertDiscordMember(message.member), 
-        mentions: convertDiscordMentions(message.mentions)
+        member:     convertDiscordMember(message.member), 
+        mentions:   convertDiscordMentions(message.mentions),
+        reference:  message.reference ? message.reference.messageId : null
     }
 }
 

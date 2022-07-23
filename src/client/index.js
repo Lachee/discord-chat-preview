@@ -18,12 +18,12 @@ function autoscroll() {
 }
 
 function createMessage(message) {
-    const msg = $(`<tr class="message" id="${message.id}"></tr>`).appendTo(container).get(0);
-    $('<td class="name"></td><td class="content"><div class="markdown"></div><div class="reactions"></div></td>').appendTo(msg);
+    const msg = $(`<tr class="message" id="${message.id}" type="${message.type}"></tr>`).appendTo(container).get(0);
+    $('<td class="name"></td><td class="content"><div class="reply"></div><div class="markdown"></div><div class="reactions"></div></td>').appendTo(msg);
     updateMessage(message);    
 }
 function updateMessage(message) {
-    const { id, member, content, createdAt } = message;
+    const { id, member, content, createdAt, reference } = message;
     const markdownOptions = {
         discordCallback: {
             user: ({id})    => tagUser(id, message.mentions?.members),
@@ -44,8 +44,36 @@ function updateMessage(message) {
     if ($(`#${id}`).find('.content > .markdown').text().trim().length == 0)
         $(`#${id}`).find('.content > .markdown').addClass('image-only');
 
+    // Setup the reply
+    const replyContainer = $(`#${id}`).find('.content > .reply');
+    replyContainer.html('').attr('ref', reference);
+    if (reference) {
+        const refs = $(`#${reference}`).get();
+        if (refs.length > 0) {
+            const namecon = $('<div class="name"></div>').appendTo(replyContainer);
+            copyElement($(refs).find('.name'), namecon);
+
+            const contentcon = $('<div class="content"></div>').appendTo(replyContainer);
+            copyElement($(refs).find('.content'), contentcon);
+        }
+    }
+
     autoscroll();
 }
+
+
+function copyElement($target, $dest) {
+    $dest.html($target.html());
+    $target.each(function () {
+        $.each(this.attributes, function() {
+            if(this.specified) {
+                $dest.attr(this.name, this.value);
+            }
+        });
+    });
+}
+
+
 function deleteMessage(message) {
     const {id} = message;
     $(`#${id}`).remove();
