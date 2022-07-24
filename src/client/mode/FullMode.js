@@ -1,6 +1,7 @@
 import './FullMode.scss';
 import $ from 'cash-dom';
 import { BaseMode, autoScroll, copyElement, markdown } from './BaseMode.js';
+import { tagEmote } from '../markdown.js';
 
 export class FullMode extends BaseMode {
 

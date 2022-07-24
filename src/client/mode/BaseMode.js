@@ -1,7 +1,7 @@
 
 import $ from "cash-dom";
 import  { toHTML } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
-import { tagUser, tagChannel, tagRole, tagEmote } from '../markdown.js';
+import { tagUser, tagChannel, tagRole } from '../markdown.js';
 
 export class BaseMode {
 
