@@ -1,1 +1,16 @@
 @import "./theme.scss";
+
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: $color-text;
+
+    background-color: $color-background;
+    &.transparent { background-color: transparent; }
+    margin: 10px;
+}

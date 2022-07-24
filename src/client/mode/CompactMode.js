@@ -1,8 +1,8 @@
 import './CompactMode.scss';
 import $ from 'cash-dom';
-import { BaseMode, autoScroll, copyElement, markdown } from './BaseMode.js';
+import { FullMode } from './FullMode.js';
 
-export class CompactMode extends BaseMode {
+export class CompactMode extends FullMode {
 
     /** @type {Element} the dom container */
     container;
@@ -14,12 +14,17 @@ export class CompactMode extends BaseMode {
     }
 
     /** Creates a new message then updates it with content */
-    createMessage(message) {}
-    /** Updates an existing message */
-    updateMessage(message) {}
-    /** Deletes a message */
-    deleteMessage(message) {}
-
-    /** Updates a reaction */
-    updateReaction(reaction)  {}
+    createMessage(message) {
+        const msg = $(`<div class="message" id="${message.id}" type="${message.type}"></div>`).appendTo(this.container).get(0);     
+        $('<div class="name"></div><div class="content"><div class="reply"></div><div class="markdown"></div><div class="reactions"></div></div>').appendTo(msg);
+        this.updateMessage(message);
+    }
+    
+//    /** Updates an existing message */
+//    updateMessage(message) {}
+//    /** Deletes a message */
+//    deleteMessage(message) {}
+//
+//    /** Updates a reaction */
+//    updateReaction(reaction)  {}
 }
