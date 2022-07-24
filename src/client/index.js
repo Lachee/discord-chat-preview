@@ -5,7 +5,7 @@ import $ from "cash-dom";
 import  { toHTML as markdown } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
 import { tagUser, tagChannel, tagRole, tagEmote } from './markdown.js';
 
-const LOG_PING_PONG = false;
+const LOG_PING_PONG = true;
 
 let container = null;
 let currentSocket = null;
@@ -116,12 +116,10 @@ function initializeWebsocket() {
                 break;
 
             case 'ping':
-                const delay = (data.ping - Date.now());
-                if (LOG_PING_PONG) console.log(Date.now(), 'PING 🏓', delay, data);
-                setTimeout(() => {
-                    if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓');
-                    socket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));
-                }, delay);
+                const { time, /* respondBy, delay */ } = data;
+                const latency = (now() - time);
+                if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓', latency + "ms");
+                socket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));
                 break;
 
             case 'discord':
@@ -160,6 +158,12 @@ function initializeWebsocket() {
 function initializeChatbox() {
     $('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>').appendTo(document.head);
     container = $('<table id="chat" class="chat"></table>').appendTo(document.body).get();
+}
+
+/** @returns {Number} unix epoch time */
+function now() 
+{ 
+    return Math.floor(+new Date());
 }
 
 document.addEventListener('DOMContentLoaded', () => {
