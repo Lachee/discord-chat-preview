@@ -8,6 +8,7 @@ export class FullMode extends BaseMode {
     container;
 
     initialize(parent) {
+        console.log('initialize full mode');
         this.container = $('<table id="chat" class="chat"></table>').appendTo(parent).get();
     }
 
