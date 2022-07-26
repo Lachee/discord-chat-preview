@@ -175,7 +175,6 @@ export function createRouter(discord, channels = []) {
                 connection.send('discord', converted, 'message.create');
         });
     });
-
     
     // Message create, we will broadcast to each and every valid object
     discord.on('messageUpdate', async (oldMessage, newMessage) => {
@@ -187,7 +186,6 @@ export function createRouter(discord, channels = []) {
         });
     });
     
-
     // Message create, we will broadcast to each and every valid object
     discord.on('messageDelete', async (message) => {
         connections.forEach(connection => {
@@ -214,6 +212,11 @@ export function createRouter(discord, channels = []) {
         });
     });
     
+    /**
+     * TODO: Add support to voice channel events.
+     * Add "include" query parameter that will send events from those additional channels to this one.
+     */
+
     // Create the websocket endpoint
     router.ws(`/:channel`,  function(ws, req) {
         console.log('new channel ws');
