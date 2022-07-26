@@ -2,13 +2,16 @@ import './index.scss';
 import './hljs.scss';
 
 import $ from "cash-dom";
-import { BaseMode } from './mode/BaseMode.js';
+import { BaseMode, createOptionsFromURLSearchParams } from './mode/BaseMode.js';
 import { FullMode } from './mode/FullMode.js';
 import { CompactMode } from './mode/CompactMode.js';
 
 const LOG_PING_PONG = false;
 
 const params = new URLSearchParams(window.location.search);
+function get(name, defaultValue = null) {
+    return params.get(name) ?? defaultValue;
+}
 
 /** @type {BaseMode} current mode */
 let currentMode;
@@ -77,14 +80,15 @@ function initializeWebsocket() {
 function initializeMode() {
     $('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>').appendTo(document.head);
     
+    const options = createOptionsFromURLSearchParams(params);
     switch(params.get('mode') || 'full') {
         default:
         case 'full':
-            currentMode = new FullMode();
+            currentMode = new FullMode(options);
             break;
 
         case 'compact':
-            currentMode = new CompactMode();
+            currentMode = new CompactMode(options);
             break;
     }
     currentMode.initialize(document.body);

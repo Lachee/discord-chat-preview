@@ -54,17 +54,17 @@ export class FullMode extends BaseMode {
             const { video, url, thumbnail } = data;
             if (video) {
                 $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
-                    .one('play', () => { if (this.autoScroll) autoScroll(); })
+                    .one('play', () => { if (this.options.autoScroll) autoScroll(); })
                     .appendTo(embedContainer);
             } else if (thumbnail) {
                 $(`<img src="${thumbnail.proxy_url}"></img>`)
-                    .one('load', () => { if (this.autoScroll) autoScroll(); })
+                    .one('load', () => { if (this.options.autoScroll) autoScroll(); })
                     .appendTo(embedContainer);
             }
         }
     
         // Autoscroll
-        if (this.autoScroll)
+        if (this.options.autoScroll)
             autoScroll();
     }
     
@@ -72,7 +72,7 @@ export class FullMode extends BaseMode {
         const {id} = message;
         $(`#${id}`).remove();
 
-        if (this.autoScroll)
+        if (this.options.autoScroll)
             autoScroll();
     }
     
@@ -92,7 +92,7 @@ export class FullMode extends BaseMode {
             query.find('.count').text(count);
         }
         
-        if (this.autoScroll)
+        if (this.options.autoScroll)
             autoScroll();
     }
 }
