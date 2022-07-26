@@ -22,7 +22,7 @@ export function createOptionsFromURLSearchParams(params) {
     options.allowMarkdown   = checkParamsBoolean(params, 'allow_markdown', true);
     options.allowBigEmotes  = checkParamsBoolean(params, 'allow_big_emotes', true);
     options.trimEmoji       = checkParamsBoolean(params, 'trim_emoji', false);
-    options.showChannelName = checkParamsBoolean(params, 'show_channel', false);
+    options.showChannelName = checkParamsBoolean(params, 'show_channel', true);
     options.autoScroll      = checkParamsBoolean(params, 'scroll', true);
     return options;
 }
@@ -52,7 +52,6 @@ export class BaseMode {
 
     /** @type {Options} options */
     options;
-
     /** Creates a new instance of the mode
      * @param {Options} options 
      */
@@ -63,6 +62,9 @@ export class BaseMode {
 
     /** Initializes the default box */
     initialize(parent) {}
+
+    /** Updates the label of the chanel name */
+    updateChannelName(channel) { }
 
     /** Creates a new message then updates it with content */
     createMessage(message) {}
@@ -76,6 +78,7 @@ export class BaseMode {
 
     setAutoScroll(state) { this.options.autoScroll = state; }
     getAutoScroll() { return this.options.autoScroll; }
+
 }
 
 export function copyElement($target, $dest) {
@@ -89,11 +92,15 @@ export function copyElement($target, $dest) {
     });
 }
 
-export function autoScroll() {
-    window.scrollTo({
-        top: document.body.clientHeight * 100,
-        behavior: 'smooth'
-    });
+export function autoScroll(element) {
+    try {
+        element.scrollTo({
+            top: element.clientHeight * 100,
+            behavior: 'smooth'
+        });
+    }catch(error) {
+        console.error(error, element);
+    }
 }
 
 /** Creates a HTML representation of a message */

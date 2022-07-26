@@ -1,9 +1,19 @@
 @import "../theme.scss";
+@import './FullMode.scss';
 
-.chat {
-
+.chat.chat-compact {
+    position: absolute;
+    overflow: scroll;
     font-size: 9pt;
     line-height: 1.5em;
+
+    padding: 0 $chat-padding;
+    top: $chat-padding;
+    bottom: $chat-padding;
+    &.with-header {
+        top: $header-height + $header-padding * 2 + $chat-padding;
+    }
+
 
     .message {
         display: inline-block;

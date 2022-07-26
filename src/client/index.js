@@ -46,6 +46,12 @@ function initializeWebsocket() {
                 console.log('[DISCORD]', content, data);
                 if (currentMode != null) {
                     switch(content) {
+                        default:
+                            console.warn('unkown discord mode', content, data);
+                            break;
+                        case 'channel.update':
+                            currentMode.updateChannelName(data);
+                            break;
                         case 'message.create':
                             currentMode.createMessage(data);
                             break;
@@ -82,12 +88,12 @@ function initializeMode() {
     
     const options = createOptionsFromURLSearchParams(params);
     console.log('initialize mode with options: ', options);
-    switch(params.get('mode') || 'full') {
-        default:
+    switch(params.get('mode') || 'compact') {
         case 'full':
             currentMode = new FullMode(options);
             break;
-
+            
+        default:
         case 'compact':
             currentMode = new CompactMode(options);
             break;

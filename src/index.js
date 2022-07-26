@@ -230,7 +230,20 @@ export function createRouter(discord, channels = []) {
         // Add the connection
         const connection = new Connection(ws, req.params.channel);
         connections.push(connection);
+        tryFetchChannelDetails();
                 
+        function tryFetchChannelDetails() {
+            discord.channels.fetch(connection.channelId).then(channel => {
+                if (channel == null)  {
+                    console.log('could not find the channel, perhaps we havn\'t loaded yet!?', connection.channelId);
+                    setTimeout(() => tryFetchChannelDetails(), 1000);
+                } else {
+                    connection.ping();
+                    connection.send('discord', convertDiscordChannel(channel), 'channel.update');
+                }
+            });
+        }
+
         // On close remove the connection
         ws.on('close', function(msg) {
             connections = connections.filter(con => con.ws != ws);
@@ -242,7 +255,6 @@ export function createRouter(discord, channels = []) {
             connection.pongTime = now(); 
         });
 
-        connection.ping();
         console.log('connection established: ', connections.length);
     });
 

@@ -1,16 +1,41 @@
 import './FullMode.scss';
 import $ from 'cash-dom';
-import { BaseMode, autoScroll, copyElement, markdown, trimEmoji } from './BaseMode.js';
+import { BaseMode, autoScroll, copyElement, markdown, trimEmoji, createOptionsFromURLSearchParams } from './BaseMode.js';
 import { tagEmote } from '../markdown.js';
 
 export class FullMode extends BaseMode {
 
     /** @type {Element} the dom container */
     container;
+    /** @type {Element} container for the channel name */
+    channelNameContainer;
 
     initialize(parent) {
         console.log('initialize full mode');
-        this.container = $('<table id="chat" class="chat"></table>').appendTo(parent).get();
+        $('<table class="chat-container"><thead><tr><th></th><th></th></tr></thead><tbody class="chat chat-full" id="chat"></tbody></table>').appendTo(parent);
+        this.container = $('#chat').get(0);
+        
+        if (this.options.showChannelName)
+            $(this.container).addClass('with-header');
+    }
+
+    createChannelName(channel) {
+        if (this.channelNameContainer)
+            this.channelNameContainer.remove();
+
+        this.channelNameContainer = $('<div class="header"><div class="name"></div></div>')
+            .prependTo(document.body)
+            .get();
+    }
+    updateChannelName(channel) {
+        if (!this.options.showChannelName) 
+            return;
+
+        if (this.channelNameContainer == null) 
+            this.createChannelName(channel);
+        
+        $(this.channelNameContainer).find('.name').text(channel.name);
+        this.scroll();
     }
 
     createMessage(message) {
@@ -69,28 +94,25 @@ export class FullMode extends BaseMode {
                 if (video) {
                     if (this.options.allowVideos) {
                         $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
-                            .one('play', () => { if (this.options.autoScroll) autoScroll(); })
+                            .one('play', () => { this.scroll(); })
                             .appendTo(embedContainer);
                     }
                 } else if (thumbnail) {
                     $(`<img src="${thumbnail.proxy_url}"></img>`)
-                        .one('load', () => { if (this.options.autoScroll) autoScroll(); })
+                        .one('load', () => { this.scroll(); })
                         .appendTo(embedContainer);
                 }
             }
         }
     
         // Autoscroll
-        if (this.options.autoScroll)
-            autoScroll();
+        this.scroll();
     }
     
     deleteMessage(message) {
         const {id} = message;
         $(`#${id}`).remove();
-
-        if (this.options.autoScroll)
-            autoScroll();
+        this.scroll();
     }
     
     updateReaction(reaction) {
@@ -110,8 +132,12 @@ export class FullMode extends BaseMode {
             }
             query.find('.count').text(count);
         }
-        
-        if (this.options.autoScroll)
-            autoScroll();
+        this.scroll();
+    }
+
+    scroll() {
+        if (!this.options.autoScroll)
+            return false;
+        autoScroll(this.container);
     }
 }
