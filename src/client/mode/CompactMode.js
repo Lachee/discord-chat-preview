@@ -16,7 +16,7 @@ export class CompactMode extends FullMode {
     /** Creates a new message then updates it with content */
     createMessage(message) {
         const msg = $(`<div class="message" id="${message.id}" type="${message.type}"></div>`).appendTo(this.container).get(0);     
-        $('<div class="name"></div><div class="content"><div class="reply"></div><div class="markdown"></div><div class="reactions"></div></div>').appendTo(msg);
+        $('<div class="name"></div><div class="content"><div class="reply"></div><div class="markdown"></div><div class="embeds"></div><div class="reactions"></div></div>').appendTo(msg);
         this.updateMessage(message);
     }
     

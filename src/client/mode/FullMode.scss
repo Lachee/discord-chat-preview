@@ -23,7 +23,7 @@ $reply-offset: 1.5em;
             }
 
             .embeds {
-                video, img { width: 100%; }
+                video, img { width: 100%; border-radius: 5px; }
             }
 
             .markdown {
