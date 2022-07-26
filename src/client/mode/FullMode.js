@@ -1,6 +1,6 @@
 import './FullMode.scss';
 import $ from 'cash-dom';
-import { BaseMode, autoScroll, copyElement, markdown } from './BaseMode.js';
+import { BaseMode, autoScroll, copyElement, markdown, trimEmoji } from './BaseMode.js';
 import { tagEmote } from '../markdown.js';
 
 export class FullMode extends BaseMode {
@@ -21,45 +21,62 @@ export class FullMode extends BaseMode {
     updateMessage(message) {
         const { id, member, reference , embeds } = message;
 
+        // Write the name
+        const name = this.options.trimEmoji ? trimEmoji(member.name) : member.name;
         $(`#${id}`).find('.name')
-            .text(member.name)
+            .text(name)
             .css({ color: member.color === '#000000' ? 'inherit' : member.color });
     
-        $(`#${id}`).find('.content > .markdown')
-            .html(markdown(message));
+        // Write the markdown
+        if (this.options.allowMarkdown) {
+            $(`#${id}`).find('.content > .markdown')
+                .html(markdown(message));
+        } else {
+            $(`#${id}`).find('.content > .markdown')
+                .text(message.content);
+        }
             
         // If the content is only image tags then apply
         $(`#${id}`).find('.content > .markdown').removeClass('image-only');
-        if ($(`#${id}`).find('.content > .markdown').text().trim().length == 0)
+        if (this.options.allowBigEmotes && $(`#${id}`).find('.content > .markdown').text().trim().length == 0)
             $(`#${id}`).find('.content > .markdown').addClass('image-only');
     
         // Setup the reply
         const replyContainer = $(`#${id}`).find('.content > .reply');
         replyContainer.html('').attr('ref', reference);
-        if (reference) {
-            const refs = $(`#${reference}`).get();
-            if (refs.length > 0) {
-                const namecon = $('<div class="name"></div>').appendTo(replyContainer);
-                copyElement($(refs).find('.name'), namecon);
-    
-                const contentcon = $('<div class="content"></div>').appendTo(replyContainer);
-                copyElement($(refs).find('.content'), contentcon);
+        if (this.options.allowReplies) {
+            if (reference) {
+                const refs = $(`#${reference}`).get();
+                if (refs.length > 0) {
+                    const namecon = $('<div class="name"></div>').appendTo(replyContainer);
+                    copyElement($(refs).find('.name'), namecon);
+        
+                    const contentcon = $('<div class="content"></div>').appendTo(replyContainer);
+                    copyElement($(refs).find('.content'), contentcon);
+                }
             }
+        } else {
+            // Fix the reply width if we cannot allow replies
+            $(`#${id}`).attr("type", 0);
         }
 
         // Setup the embeds 
         const embedContainer = $(`#${id}`).find('.content > .embeds');
         embedContainer.html('');
-        for(let { data } of embeds) {
-            const { video, url, thumbnail } = data;
-            if (video) {
-                $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
-                    .one('play', () => { if (this.options.autoScroll) autoScroll(); })
-                    .appendTo(embedContainer);
-            } else if (thumbnail) {
-                $(`<img src="${thumbnail.proxy_url}"></img>`)
-                    .one('load', () => { if (this.options.autoScroll) autoScroll(); })
-                    .appendTo(embedContainer);
+        if (this.options.allowEmbeds) {
+            for(let { data } of embeds) {
+                const { video, url, thumbnail } = data;
+                if (video) {
+                    if (this.options.allowVideos) {
+                        $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
+                            .one('play', () => { if (this.options.autoScroll) autoScroll(); })
+                            .appendTo(embedContainer);
+                    }
+                } else if (thumbnail) {
+                    $(`<img src="${thumbnail.proxy_url}"></img>`)
+                        .one('load', () => { if (this.options.autoScroll) autoScroll(); })
+                        .appendTo(embedContainer);
+                }
             }
         }
     
@@ -77,8 +94,10 @@ export class FullMode extends BaseMode {
     }
     
     updateReaction(reaction) {
+        if (!this.options.allowReactions)
+            return;
+
         const {id, emote, count} = reaction;
-    
     
         // If it doesnt exist then we will add one
         let query = $(`#${id}`).find('.content .reactions').find(`[data-id="${emote.identifier}"]`);

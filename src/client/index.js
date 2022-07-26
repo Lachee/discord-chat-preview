@@ -81,6 +81,7 @@ function initializeMode() {
     $('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>').appendTo(document.head);
     
     const options = createOptionsFromURLSearchParams(params);
+    console.log('initialize mode with options: ', options);
     switch(params.get('mode') || 'full') {
         default:
         case 'full':

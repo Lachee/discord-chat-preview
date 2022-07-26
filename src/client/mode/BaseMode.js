@@ -17,6 +17,8 @@ export function createOptionsFromURLSearchParams(params) {
     options.allowVideos     = checkParamsBoolean(params, 'allow_videos', true);
     options.allowReplies    = checkParamsBoolean(params, 'allow_replies', true);
     options.allowReactions  = checkParamsBoolean(params, 'allow_reactions', true);
+    options.allowMarkdown   = checkParamsBoolean(params, 'allow_markdown', true);
+    options.allowBigEmotes  = checkParamsBoolean(params, 'allow_big_emotes', true);
     options.trimEmoji       = checkParamsBoolean(params, 'trim_emoji', false);
     options.showChannelName = checkParamsBoolean(params, 'show_channel', false);
     options.autoScroll      = checkParamsBoolean(params, 'scroll', true);
@@ -32,6 +34,10 @@ export class Options {
     allowReplies = true;
     /** @type {Boolean} enables reactions */
     allowReactions = true;
+    /** @type {Boolean} enables markdown */
+    allowMarkdown = true;
+    /** @type {Boolean} allows emotes to grow when they are the only thing posted */
+    allowBigEmotes = true;
     /** @type {Boolean} automatically trims the emojis from user names */
     trimEmoji = false;
     /** @type {Boolean} display the channel name at the top of the screen */
@@ -99,4 +105,8 @@ export function markdown(message) {
     }
 
     return toHTML(message.content, markdownOptions);
+}
+
+export function trimEmoji(str) {
+    return str.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '')
 }
