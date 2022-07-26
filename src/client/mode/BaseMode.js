@@ -2,10 +2,12 @@
 import $ from "cash-dom";
 import  { toHTML } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
 import { tagUser, tagChannel, tagRole } from '../markdown.js';
+import emojiStrip from 'emoji-strip';
 
 function checkParamsBoolean(params, name, defaultValue = false) {
     if (!params.has(name)) return defaultValue;
-    return (params.get(name) ?? defaultValue) == true;
+    const value = params.get(name) || defaultValue;
+    return value == true || value == 'true' || value == '1';
 }
 
 /** Creates a new options object from the search params
@@ -108,5 +110,6 @@ export function markdown(message) {
 }
 
 export function trimEmoji(str) {
-    return str.replace(/([\uE000-\uF8FF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g, '')
+    return emojiStrip(str);
+    //return str.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
 }
