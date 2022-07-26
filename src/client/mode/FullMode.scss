@@ -22,6 +22,10 @@ $reply-offset: 1.5em;
                 font-style: italic;
             }
 
+            .embeds {
+                video, img { width: 100%; }
+            }
+
             .markdown {
                 // Highlight code
                 pre, code

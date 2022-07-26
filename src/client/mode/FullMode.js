@@ -15,11 +15,11 @@ export class FullMode extends BaseMode {
 
     createMessage(message) {
         const msg = $(`<tr class="message" id="${message.id}" type="${message.type}"></tr>`).appendTo(this.container).get(0);
-        $('<td class="name"></td><td class="content"><div class="reply"></div><div class="markdown"></div><div class="reactions"></div></td>').appendTo(msg);
+        $('<td class="name"></td><td class="content"><div class="reply"></div><div class="markdown"></div><div class="embeds"></div><div class="reactions"></div></td>').appendTo(msg);
         this.updateMessage(message);    
     }
     updateMessage(message) {
-        const { id, member, reference } = message;
+        const { id, member, reference , embeds } = message;
 
         $(`#${id}`).find('.name')
             .text(member.name)
@@ -46,10 +46,28 @@ export class FullMode extends BaseMode {
                 copyElement($(refs).find('.content'), contentcon);
             }
         }
+
+        // Setup the embeds 
+        const embedContainer = $(`#${id}`).find('.content > .embeds');
+        embedContainer.html('');
+        for(let { data } of embeds) {
+            const { video, url, thumbnail } = data;
+            if (video) {
+                $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
+                    .one('play', () => { if (this.autoScroll) autoScroll(); })
+                    .appendTo(embedContainer);
+            } else if (thumbnail) {
+                $(`<img src="${thumbnail.proxy_url}"></img>`)
+                    .one('load', () => { if (this.autoScroll) autoScroll(); })
+                    .appendTo(embedContainer);
+            }
+        }
     
+        // Autoscroll
         if (this.autoScroll)
             autoScroll();
     }
+    
     deleteMessage(message) {
         const {id} = message;
         $(`#${id}`).remove();

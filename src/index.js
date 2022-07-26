@@ -1,5 +1,5 @@
 import { Router as expressRouter } from "express";
-import { Client, Message, MessageReaction, User, MessageMentions } from "discord.js";
+import { Client, Message, MessageReaction, User, MessageMentions, Embed } from "discord.js";
 
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -24,7 +24,22 @@ function convertDiscordMessage(message) {
         editedAt:   message.editedAt,
         member:     convertDiscordMember(message.member), 
         mentions:   convertDiscordMentions(message.mentions),
+        embeds:     message.embeds ? message.embeds.map(embed => convertDiscordEmbed(embed)) : [],
         reference:  message.reference ? message.reference.messageId : null
+    }
+}
+
+/**
+ * @param {Embed} embed 
+ */
+function convertDiscordEmbed(embed) {
+    if (embed == null) return null;
+    return {
+        title:          embed.title,
+        description:    embed.description,
+        color:          embed.hexColor,
+        url:            embed.url,
+        data:           embed.data,
     }
 }
 
