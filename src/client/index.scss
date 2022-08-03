@@ -13,3 +13,12 @@ body {
     background-color: $color-background;
     &.transparent { background-color: transparent; }
 }
+
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
