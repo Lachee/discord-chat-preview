@@ -1,6 +1,6 @@
 {
   "name": "discord-chat-preview",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Live Channel Preview for Discord",
   "main": "src/index.js",
   "type": "module",
@@ -19,7 +19,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.0.3",
+    "discord.js": "^13.0.0 || ^14.1.2",
     "express": "^4.18.1",
     "express-ws": "^5.0.2"
   },
@@ -27,6 +27,7 @@
     "cash-dom": "^8.1.1",
     "css-loader": "^6.7.1",
     "discord-markdown": "^2.5.1",
+    "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
     "emoji-strip": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",

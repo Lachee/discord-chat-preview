@@ -1,11 +1,16 @@
 import { Router as expressRouter } from "express";
-import { Client, Message, MessageReaction, User, MessageMentions, Embed } from "discord.js";
+
+import djs from "discord.js";
+const DJS_13 = '1.13'; 
+const DJS_14 = '1.14';
+const DJS_VERSION = djs.Embed ? DJS_14 : DJS_13;
+const { Client, Message, MessageReaction, User, MessageMentions } = djs;
+const Embed = DJS_VERSION == DJS_14 ? djs.Embed : djs.MessageEmbed;
 
 import path from 'path';
 import {fileURLToPath} from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const CONNECTION_MIN_PONG_DELAY = 1000;
 const CONNECTION_MAX_PONG_DELAY = 5000;
@@ -34,12 +39,29 @@ function convertDiscordMessage(message) {
  */
 function convertDiscordEmbed(embed) {
     if (embed == null) return null;
+    
+    let embedData = embed.data;
+    if (DJS_VERSION == DJS_13) {
+        // Setup the data
+        const { thumbnail, video } = embed;
+        embedData = {
+            thumbnail: thumbnail,
+            video: video
+        };
+        
+        // convert proxy to snake
+        if (embedData.thumbnail)
+            embedData.thumbnail.proxy_url = embedData.thumbnail.proxyURL;
+        if (embedData.video)
+            embedData.video.proxy_url = embedData.video.proxyURL;
+    }
+
     return {
         title:          embed.title,
         description:    embed.description,
         color:          embed.hexColor,
         url:            embed.url,
-        data:           embed.data,
+        data:           embedData,
     }
 }
 

@@ -1,22 +1,41 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import djs from "discord.js";
+
+/** @type {djs.Client} client */
+let client = null;
+
+if (djs.Intents) {
+    console.log('creating DJS 1.13 bot');
+    const { Client, Intents } = djs;
+    client = new Client({ 
+        intents: [
+            Intents.FLAGS.GUILDS, 
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.GUILD_MEMBERS,
+            Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
+        ], 
+        partials: [ 'CHANNEL' ] 
+    });
+} else {
+    console.log('creating DJS 1.14 bot');
+    const { Client, GatewayIntentBits, Partials }  = djs;
+    client = new Client({ 
+        intents: [
+            GatewayIntentBits.Guilds, 
+            GatewayIntentBits.MessageContent,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageReactions,
+        ], 
+        partials: [Partials.GuildMember, Partials.Message] 
+    });
+}
+
 import { createRouter } from './index.js';
 import express from 'express';
 import expressWebSocket from "express-ws";
-
-
-// Create the discord client
-const client = new Client({ 
-    intents: [
-        GatewayIntentBits.Guilds, 
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMessageReactions,
-    ], 
-    partials: [Partials.GuildMember, Partials.Message] 
-});
 
 // Create the express client
 const app   = express();

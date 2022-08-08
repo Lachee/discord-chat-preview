@@ -89,19 +89,37 @@ export class FullMode extends BaseMode {
         const embedContainer = $(`#${id}`).find('.content > .embeds');
         embedContainer.html('');
         if (this.options.allowEmbeds) {
-            for(let { data } of embeds) {
-                if (data) {
-                    if (data.video) {
-                        if (this.options.allowVideos) {
-                            $(`<video autoplay loop muted src="${data.video.proxy_url}"></video>`)
-                                .one('play', () => { this.scroll(); })
-                                .appendTo(embedContainer);
-                        }
-                    } else if (data.thumbnail) {
-                        $(`<img src="${data.thumbnail.proxy_url}"></img>`)
-                            .one('load', () => { this.scroll(); })
+            for(let embed of embeds) {
+                let videoURL = null;
+                let thumbnailURL = null;
+
+                // Determine the elements urls.
+                // If we dont have the data object, we need to be in compat' mode
+                if (!embed.data) {
+                    // We have to use backwards compatability with d.js 13
+                    console.warn("Failed to get any data from the embed");
+                    continue;
+                } else {
+                    const { video, thumbnail } = embed.data;
+                    if (video) 
+                        videoURL = video.proxy_url;
+                    if (thumbnail) 
+                        thumbnailURL = thumbnail.proxy_url;
+                }
+
+                // Create the elemends
+                if (videoURL) {
+                    if (this.options.allowVideos) {
+                        $(`<video autoplay loop muted src="${videoURL}"></video>`)
+                            .one('play', () => { this.scroll(); })
                             .appendTo(embedContainer);
                     }
+                } else if (thumbnailURL) {
+                    $(`<img src="${thumbnailURL}"></img>`)
+                        .one('load', () => { this.scroll(); })
+                        .appendTo(embedContainer);
+                } else {
+                    console.warn("Failed to create the embed as it doesnt contain a video or thumbnail:", embed);
                 }
             }
         }
