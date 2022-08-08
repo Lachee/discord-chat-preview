@@ -90,17 +90,18 @@ export class FullMode extends BaseMode {
         embedContainer.html('');
         if (this.options.allowEmbeds) {
             for(let { data } of embeds) {
-                const { video, url, thumbnail } = data;
-                if (video) {
-                    if (this.options.allowVideos) {
-                        $(`<video autoplay loop muted src="${video.proxy_url}"></video>`)
-                            .one('play', () => { this.scroll(); })
+                if (data) {
+                    if (data.video) {
+                        if (this.options.allowVideos) {
+                            $(`<video autoplay loop muted src="${data.video.proxy_url}"></video>`)
+                                .one('play', () => { this.scroll(); })
+                                .appendTo(embedContainer);
+                        }
+                    } else if (data.thumbnail) {
+                        $(`<img src="${data.thumbnail.proxy_url}"></img>`)
+                            .one('load', () => { this.scroll(); })
                             .appendTo(embedContainer);
                     }
-                } else if (thumbnail) {
-                    $(`<img src="${thumbnail.proxy_url}"></img>`)
-                        .one('load', () => { this.scroll(); })
-                        .appendTo(embedContainer);
                 }
             }
         }
