@@ -1,5 +1,5 @@
 import { Router as expressRouter } from "express";
-import { Client, Message, MessageReaction, User, MessageMentions } from "discord.js";
+import { Client, Message, MessageReaction, User, MessageMentions, Interaction } from "discord.js";
 
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -102,6 +102,37 @@ function convertDiscordMessageReaction(messageReaction, user) {
 
 /**
  * 
+ * @param {Interaction} interaction 
+ * @param {User} user
+ */
+function convertDiscordInteraction(interaction) {
+    if (interaction == null) return interaction;
+
+    if (interaction.isApplicationCommand())
+    {
+        return {
+            id: interaction.id,
+            commandName: interaction.commandName,
+            member: interaction.user ? { id: interaction.user.id } : null,
+        }
+    }
+    else if (interaction.isMessageComponent())
+    {
+        return {
+            id: interaction.id,
+            customId: interaction.customId,
+            member: interaction.user ? { id: interaction.user.id } : null,
+        }
+    }
+    else
+    {
+        console.log("Unsupported Interaction");
+        return null;
+    }
+}
+
+/**
+ * 
  * @param {GuildEmoji|ReactionEmoji} emoji 
  * @returns 
  */
@@ -186,6 +217,14 @@ export function createRouter(discord, channels = []) {
         connections.forEach(connection => {
             if (connection.channelId == messageReaction.message.channelId) 
                 connection.send('discord',  converted, 'reaction.remove');
+        });
+    });
+
+    discord.on('interactionCreate', async (interaction) => {
+        const converted = await convertDiscordInteraction(interaction);
+        connections.forEach(connection => {
+            if (connection.channelId == interaction.channelId) 
+                connection.send('discord',  converted, 'interaction.create');
         });
     });
     

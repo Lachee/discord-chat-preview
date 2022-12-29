@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import { Client, Intents } from 'discord.js';
 import { createRouter } from './index.js';
 import express from 'express';
 import expressWebSocket from "express-ws";
@@ -9,13 +9,18 @@ import expressWebSocket from "express-ws";
 
 // Create the discord client
 const client = new Client({ 
-    intents: [
-        GatewayIntentBits.Guilds, 
-        GatewayIntentBits.MessageContent,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMessageReactions,
-    ], 
-    partials: [Partials.GuildMember, Partials.Message] 
+    intents: [ 
+        Intents.FLAGS.GUILDS, 
+        Intents.FLAGS.GUILD_INVITES, 
+        Intents.FLAGS.GUILD_MEMBERS, 
+        Intents.FLAGS.GUILD_MESSAGE_REACTIONS, 
+        Intents.FLAGS.GUILD_PRESENCES,
+        Intents.FLAGS.GUILD_MESSAGES, 
+        Intents.FLAGS.GUILD_VOICE_STATES,
+        Intents.FLAGS.GUILD_SCHEDULED_EVENTS,
+        Intents.FLAGS.DIRECT_MESSAGES,
+    ],partials: ["CHANNEL"],
+    fetchAllMembers: true
 });
 
 // Create the express client
