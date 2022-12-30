@@ -4,7 +4,7 @@ import djs from "discord.js";
 const DJS_13 = '1.13'; 
 const DJS_14 = '1.14';
 const DJS_VERSION = djs.Embed ? DJS_14 : DJS_13;
-const { Client, Message, MessageReaction, User, MessageMentions } = djs;
+const { Client, Message, MessageReaction, User, MessageMentions, Interaction } = djs;
 const Embed = DJS_VERSION == DJS_14 ? djs.Embed : djs.MessageEmbed;
 
 import path from 'path';
@@ -143,6 +143,37 @@ function convertDiscordMessageReaction(messageReaction, user) {
 
 /**
  * 
+ * @param {Interaction} interaction 
+ * @param {User} user
+ */
+function convertDiscordInteraction(interaction) {
+    if (interaction == null) return interaction;
+
+    if (interaction.isApplicationCommand())
+    {
+        return {
+            id: interaction.id,
+            commandName: interaction.commandName,
+            member: interaction.user ? { id: interaction.user.id } : null,
+        }
+    }
+    else if (interaction.isMessageComponent())
+    {
+        return {
+            id: interaction.id,
+            customId: interaction.customId,
+            member: interaction.user ? { id: interaction.user.id } : null,
+        }
+    }
+    else
+    {
+        console.log("Unsupported Interaction");
+        return null;
+    }
+}
+
+/**
+ * 
  * @param {GuildEmoji|ReactionEmoji} emoji 
  * @returns 
  */
@@ -231,6 +262,14 @@ export function createRouter(discord, channels = []) {
         connections.forEach(connection => {
             if (connection.channelId == messageReaction.message.channelId) 
                 connection.send('discord',  converted, 'reaction.remove');
+        });
+    });
+
+    discord.on('interactionCreate', async (interaction) => {
+        const converted = await convertDiscordInteraction(interaction);
+        connections.forEach(connection => {
+            if (connection.channelId == interaction.channelId) 
+                connection.send('discord',  converted, 'interaction.create');
         });
     });
     
