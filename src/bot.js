@@ -39,7 +39,8 @@ if (djs.Intents) {
 
 import { createRouter } from './index.js';
 import express from 'express';
-import expressWebSo
+import expressWebSocket from 'express-ws';
+
 // Create the express client
 const app   = express();
 const port  = process.env.EXPRESS_PORT || 3000;
