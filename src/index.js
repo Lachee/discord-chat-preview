@@ -1,10 +1,19 @@
 import { Router as expressRouter } from "express";
-import { Client, Message, MessageReaction, User, MessageMentions, Interaction } from "discord.js";
+
+import djs from "discord.js";
+const DJS_13 = '1.13'; 
+const DJS_14 = '1.14';
+const DJS_VERSION = djs.Embed ? DJS_14 : DJS_13;
+const { Client, Message, MessageReaction, User, MessageMentions, Interaction } = djs;
+const Embed = DJS_VERSION == DJS_14 ? djs.Embed : djs.MessageEmbed;
 
 import path from 'path';
 import {fileURLToPath} from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const CONNECTION_MIN_PONG_DELAY = 1000;
+const CONNECTION_MAX_PONG_DELAY = 5000;
 
 /**
  * Converts a Discord.JS message into minimal information to render on a webpage
@@ -18,9 +27,41 @@ function convertDiscordMessage(message) {
         content:    message.content,
         createdAt:  message.createdAt,
         editedAt:   message.editedAt,
-        // reactions:  message.reactions.cache.map(r => convertDiscordMessageReaction(r, null)),
-        member:   convertDiscordMember(message.member), 
-        mentions: convertDiscordMentions(message.mentions)
+        member:     convertDiscordMember(message.member), 
+        mentions:   convertDiscordMentions(message.mentions),
+        embeds:     message.embeds ? message.embeds.map(embed => convertDiscordEmbed(embed)) : [],
+        reference:  message.reference ? message.reference.messageId : null
+    }
+}
+
+/**
+ * @param {Embed} embed 
+ */
+function convertDiscordEmbed(embed) {
+    if (embed == null) return null;
+    
+    let embedData = embed.data;
+    if (DJS_VERSION == DJS_13) {
+        // Setup the data
+        const { thumbnail, video } = embed;
+        embedData = {
+            thumbnail: thumbnail,
+            video: video
+        };
+        
+        // convert proxy to snake
+        if (embedData.thumbnail)
+            embedData.thumbnail.proxy_url = embedData.thumbnail.proxyURL;
+        if (embedData.video)
+            embedData.video.proxy_url = embedData.video.proxyURL;
+    }
+
+    return {
+        title:          embed.title,
+        description:    embed.description,
+        color:          embed.hexColor,
+        url:            embed.url,
+        data:           embedData,
     }
 }
 
@@ -163,14 +204,20 @@ export function createRouter(discord, channels = []) {
     
     // Check to insure the messages have ponged
     setInterval(() => {
+        const n = now();
         connections.forEach(connection => {
-            if (!connection.isValid()) {
-                console.log('terminating connection because it did not respond in time');
-                connection.send('close', {}, 'did not respond to pong in time!');
-                connection.ws.close();
+            // If we have passed the minimum ping time, check if they have pinged.
+            // Kick them if they pinged too late or not at all.
+            if (n >= connection.pongBefore) {
+                if (connection.pongTime > connection.pongBefore || connection.pongTime < 0) {
+                    console.log('terminating connection because it did not respond in time');
+                    connection.send('close', {}, 'did not respond to pong in time!');
+                    connection.ws.close();
+                }
+                connection.ping();
             }
         });
-    }, CONNECTION_MIN_PONGTIME);
+    }, CONNECTION_MIN_PONG_DELAY);
 
     // Message create, we will broadcast to each and every valid object
     discord.on('messageCreate', async (message) => {
@@ -181,19 +228,17 @@ export function createRouter(discord, channels = []) {
                 connection.send('discord', converted, 'message.create');
         });
     });
-
     
     // Message create, we will broadcast to each and every valid object
-    discord.on('messageUpdate', async (message) => {
-        if (!message.author || message.author.bot) return;
-        const converted    = await convertDiscordMessage(message);
+    discord.on('messageUpdate', async (oldMessage, newMessage) => {
+        if (!newMessage.author || newMessage.author.bot) return;
+        const converted    = await convertDiscordMessage(newMessage);
         connections.forEach(connection => {
-            if (connection.channelId == message.channelId) 
+            if (connection.channelId == newMessage.channelId) 
                 connection.send('discord', converted, 'message.edit');
         });
     });
     
-
     // Message create, we will broadcast to each and every valid object
     discord.on('messageDelete', async (message) => {
         connections.forEach(connection => {
@@ -228,6 +273,11 @@ export function createRouter(discord, channels = []) {
         });
     });
     
+    /**
+     * TODO: Add support to voice channel events.
+     * Add "include" query parameter that will send events from those additional channels to this one.
+     */
+
     // Create the websocket endpoint
     router.ws(`/:channel`,  function(ws, req) {
         console.log('new channel ws');
@@ -241,7 +291,20 @@ export function createRouter(discord, channels = []) {
         // Add the connection
         const connection = new Connection(ws, req.params.channel);
         connections.push(connection);
+        tryFetchChannelDetails();
                 
+        function tryFetchChannelDetails() {
+            discord.channels.fetch(connection.channelId).then(channel => {
+                if (channel == null)  {
+                    console.log('could not find the channel, perhaps we havn\'t loaded yet!?', connection.channelId);
+                    setTimeout(() => tryFetchChannelDetails(), 1000);
+                } else {
+                    connection.ping();
+                    connection.send('discord', convertDiscordChannel(channel), 'channel.update');
+                }
+            });
+        }
+
         // On close remove the connection
         ws.on('close', function(msg) {
             connections = connections.filter(con => con.ws != ws);
@@ -250,17 +313,9 @@ export function createRouter(discord, channels = []) {
 
         // On a message, we will send a pong back and tell them when we expect them.
         ws.on('message', function(msg) {
-            if (Date.now() < connection.ping) {
-                console.log('terminating connection because it responded too fast!');
-                connection.send('close', {}, 'connection responding too fast!');
-                connection.ws.close();
-            } else {
-                // Otherwise just ping pong them again
-                connection.pingPong();
-            }
-        })
+            connection.pongTime = now(); 
+        });
 
-        connection.pingPong();
         console.log('connection established: ', connections.length);
     });
 
@@ -295,20 +350,23 @@ export function createRouter(discord, channels = []) {
     return router;
 }
 
-const CONNECTION_MIN_PONGTIME = 1000;
-const CONNECTION_MAX_PONGTIME = 3000;
 class Connection {
     
     channelId;
     ws;
-    ping;
-    pong;
+    pingTime;
+
+    pongDelay;
+    pongBefore;
+    pongTime;
 
     constructor(ws, channel) {
         this.ws = ws;
         this.channelId = channel;
-        this.ping = Date.now() + CONNECTION_MIN_PONGTIME;
-        this.pong = this.ping + CONNECTION_MAX_PONGTIME;
+
+        this.pingTime = now();
+        this.pongTime = now();
+        this.pongBefore = this.pingTime + CONNECTION_MAX_PONG_DELAY;
     }
 
     /**
@@ -322,21 +380,16 @@ class Connection {
     }
 
     /** Sends a new ping to the client with the expected response time */
-    pingPong() {        
-        this.ping = Date.now() + CONNECTION_MIN_PONGTIME;
-        this.pong = this.ping + Math.floor(CONNECTION_MIN_PONGTIME + (Math.random() * CONNECTION_MAX_PONGTIME));
-        
-        const pingPong = { ping: this.ping, pong: this.pong };
+    ping() {        
+        this.pingTime       = now();
+        this.pongTime       = -1;
+
+        const delay         = random(CONNECTION_MIN_PONG_DELAY, CONNECTION_MAX_PONG_DELAY);
+        this.pongBefore     = this.pingTime + delay;
+
+        const pingPong = { time: this.pingTime, respondBy: this.pongBefore, delay: delay };
         this.send('ping', pingPong, 'Ping! 🏓');
         return pingPong;
-    }
-
-    /**
-     * Returns if the connection is valid
-     * @returns {Boolean} validity of connection
-     */
-    isValid() {
-        return this.ws && Date.now() < this.pong;
     }
 }
 
@@ -348,4 +401,17 @@ class Connection {
 function sendFile(res, filename)
 {
     res.sendFile(filename, { root: __dirname + '/../dist' });
+}
+
+/**
+ * 
+ * @returns {Number} unix epoch time
+ */
+function now() 
+{ 
+    return Math.floor(+new Date());
+}
+
+function random(min, max) {
+    return Math.floor((Math.random() * max) + min);
 }
