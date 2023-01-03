@@ -162,7 +162,8 @@ function convertDiscordInteraction(interaction) {
         return {
             id: interaction.id,
             customId: interaction.customId,
-            member: convertDiscordMember(interaction.member)
+            member: convertDiscordMember(interaction.member),
+            originalInteractionId: interaction.message?.interaction?.id
         }
     }
     else
