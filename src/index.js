@@ -154,7 +154,7 @@ function convertDiscordInteraction(interaction) {
         return {
             id: interaction.id,
             commandName: interaction.commandName,
-            member: interaction.user ? { id: interaction.user.id } : null,
+            member: convertDiscordMember(interaction.member),
         }
     }
     else if (interaction.isMessageComponent())
@@ -162,7 +162,7 @@ function convertDiscordInteraction(interaction) {
         return {
             id: interaction.id,
             customId: interaction.customId,
-            member: interaction.user ? { id: interaction.user.id } : null,
+            member: convertDiscordMember(interaction.member)
         }
     }
     else
