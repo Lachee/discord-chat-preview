@@ -3,6 +3,7 @@ import $ from "cash-dom";
 import  { toHTML } from 'discord-markdown'; // src: https://github.com/brussell98/discord-markdown
 import { tagUser, tagChannel, tagRole } from '../markdown.js';
 import emojiStrip from 'emoji-strip';
+import './BaseMode.scss';
 
 function checkParamsBoolean(params, name, defaultValue = false) {
     if (!params.has(name)) return defaultValue;
