@@ -1,0 +1,39 @@
+@import '../theme.scss';
+
+
+.header {
+    font-size: 1em;
+    font-weight: bold;
+    width: 100%;
+    height: $header-height;
+    background-color: $color-off-black;
+    padding: $header-padding;
+    position: fixed;
+    .name::before {
+        content: '#';
+        color: $color-text;
+    }
+}
+
+.reactions {
+    .reaction {
+        float: left;
+        padding: 0px 5px;
+        border-radius: 5px;
+        border: 1px solid $color-blurple;
+        background: transparentize($color-blurple, 1-0.30);
+        color: $color-off-white;
+        margin-right: 0.25em;
+    }
+    .emote {
+        height: 1em;
+        width: 1em;
+        vertical-align: middle;
+        margin-right: 0.25em;
+        margin-top: -2px;
+    }
+    .count {
+        text-align: right;
+        margin: auto;
+    }
+}

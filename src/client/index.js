@@ -5,6 +5,7 @@ import $ from "cash-dom";
 import { BaseMode, createOptionsFromURLSearchParams } from './mode/BaseMode.js';
 import { FullMode } from './mode/FullMode.js';
 import { CompactMode } from './mode/CompactMode.js';
+import { FlexMode } from './mode/FlexMode.js';
 
 const LOG_PING_PONG = false;
 
@@ -19,67 +20,25 @@ let currentMode;
 /** @type {WebSocket} current websocket */
 let currentSocket;
 
+let _socketBackoffTimeMS = 1000;
+
 function initializeWebsocket() {
     const protocol = 'ws';
-    const socket = new WebSocket(`${protocol}://${window.location.host}${window.location.pathname}`);
-    currentSocket = socket;
+    currentSocket = new WebSocket(`${protocol}://${window.location.host}${window.location.pathname}`);
 
-    socket.addEventListener('open', function(event) {
+    currentSocket.addEventListener('open', function(event) {
         console.log('socket has open');
+        _socketBackoffTimeMS = 1000;
     });
 
-    socket.addEventListener('message', function(event) {
-        const { origin, data, content } = JSON.parse(event.data);
-        switch(origin) {
-            case 'system':
-                console.log('[SERVER]', content);
-                break;
-
-            case 'ping':
-                const { time, /* respondBy, delay */ } = data;
-                const latency = (now() - time);
-                if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓', latency + "ms");
-                socket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));
-                break;
-
-            case 'discord':
-                console.log('[DISCORD]', content, data);
-                if (currentMode != null) {
-                    switch(content) {
-                        default:
-                            console.warn('unkown discord mode', content, data);
-                            break;
-                        case 'channel.update':
-                            currentMode.updateChannelName(data);
-                            break;
-                        case 'message.create':
-                            currentMode.createMessage(data);
-                            break;
-                        case 'message.edit':
-                            currentMode.updateMessage(data);
-                            break;
-                        case 'message.delete':
-                            currentMode.deleteMessage(data);
-                            break;
-                        case 'reaction.add':
-                        case 'reaction.remove':
-                            currentMode.updateReaction(data);
-                            break;
-                    }
-                }
-                break;
-
-            default:
-                console.warn('[UNKOWN]', origin, data, content);
-                break;
-
-        }
+    currentSocket.addEventListener('message', (event) => {
+        processMessage(event.data);
     });
 
-    socket.addEventListener('close', function(event) {
-        console.log('socket has closed! Attempting again in 1s');
-        setTimeout(() => initializeWebsocket(), 1000);
-
+    currentSocket.addEventListener('close', function(event) {
+        console.log('socket has closed! Attempting again in ', _socketBackoffTimeMS, 'ms');
+        setTimeout(() => initializeWebsocket(), _socketBackoffTimeMS);
+        _socketBackoffTimeMS *= 2;
     });
 }
 
@@ -88,14 +47,18 @@ function initializeMode() {
     
     const options = createOptionsFromURLSearchParams(params);
     console.log('initialize mode with options: ', options);
-    switch(params.get('mode') || 'compact') {
+    switch(params.get('mode')) {
         case 'full':
             currentMode = new FullMode(options);
             break;
-            
-        default:
+
         case 'compact':
             currentMode = new CompactMode(options);
+            break;
+            
+        default:
+        case 'flex':
+            currentMode = new FlexMode(options);
             break;
     }
     currentMode.initialize(document.body);
@@ -107,6 +70,77 @@ function now()
     return Math.floor(+new Date());
 }
 
+/**
+ * Processes a message received from the socket
+ * @param {string} message 
+ */
+function processMessage(message) {
+    const { origin, data, content } = typeof(message) === 'string' ? JSON.parse(message) : message;
+    switch(origin) {
+        case 'system':
+            console.log('[SERVER]', content);
+            break;
+
+        case 'ping':
+            if (currentSocket != null) {
+                const { time, /* respondBy, delay */ } = data;
+                const latency = (now() - time);
+                if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓', latency + "ms");
+                currentSocket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));
+            }
+            break;
+
+        case 'discord':
+            console.log('[DISCORD]', content, data);
+            if (currentMode != null) {
+                switch(content) {
+                    default:
+                        console.warn('unkown discord mode', content, data);
+                        break;
+                    case 'channel.update':
+                        currentMode.updateChannelName(data);
+                        break;
+                    case 'message.create':
+                        currentMode.createMessage(data);
+                        break;
+                    case 'message.edit':
+                        currentMode.updateMessage(data);
+                        break;
+                    case 'message.delete':
+                        currentMode.deleteMessage(data);
+                        break;
+                    case 'reaction.add':
+                    case 'reaction.remove':
+                        currentMode.updateReaction(data);
+                        break;
+                }
+            }
+            break;
+
+        default:
+            console.warn('[UNKOWN]', origin, data, content);
+            break;
+
+    }
+};
+
+/**
+ * Processes an array of message objects with an optional delay
+ * @param {Array} messages 
+ * @param {*} delay 
+ */
+function processMessages(messages, delay = 0) {
+    let time = 0;
+    for(const msg of messages) {
+        time += delay;
+        if (time > 0) {
+            setTimeout(() => processMessage(msg), time);
+        } else {
+            processMessage(msg);
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // Set the body configuration
@@ -115,4 +149,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeMode();
     initializeWebsocket();
+    document.simulateDiscordMessages = processMessages;
 });

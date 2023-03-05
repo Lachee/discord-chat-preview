@@ -1,0 +1,63 @@
+@import "../theme.scss";
+.flex {
+    overflow-y: scroll;
+    height: 100vh;
+    
+    .chat-container {
+        display: grid;
+        padding: 10px;
+        grid-gap: 0.5em;
+
+        padding-top: $header-height + $header-padding + 20px;
+    }
+    
+    .message {
+        display: flex;
+        flex-direction: column;
+
+        .content {
+            font-size: 9pt;
+            &.embed-only { display: none; }
+            &.image-only { text-align: center; }
+        }
+
+        .name {
+            font-size: 11pt;
+        }
+
+        .embeds {
+            display: flex;
+            object-fit: cover;
+            align-items: center;
+            align-content: center;
+            justify-content: center;
+
+            video, img {
+                max-width: 100%;
+                max-height: 50vh;
+            }
+        }
+
+        .reactions {
+            padding-top: 2px;
+        }
+
+        .reply {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            .name, .content { font-size: 8pt; }
+            .name {
+                margin-right: 10px;
+                &::before {
+                    content: '↩';
+                    margin-right: 4px;
+                    color: gray;
+                }
+            }
+            .content {
+                color: gray;
+            }
+        }
+    }
+}

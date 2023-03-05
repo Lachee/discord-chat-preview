@@ -6,185 +6,146 @@ $chat-padding: 10px;
 
 html { overflow: hidden; }
 
-.header 
-{
+.full {
+    .chat-container {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        position: absolute;
+        display: flex;
+        .chat {
+            position: relative;
+            padding: $chat-padding;
+            overflow: auto;
 
-    font-size: 1em;
-    font-weight: bold;
-    width: 100%;
-    height: $header-height;
-    background-color: $color-off-black;
-    padding: $header-padding;
-    position: fixed;
-
-
-    .name::before {
-        content: '#';
-        color: $color-text;
-    }
-}
-
-.chat-container {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    display: flex;
-    .chat {
-        position: relative;
-        padding: $chat-padding;
-        overflow: auto;
-
-        &.with-header {
-            padding: 0 $chat-padding;
-            top: $header-height + $header-padding * 2 + $chat-padding;
-            height: calc(100% - ($header-height + $header-padding * 2 + $chat-padding * 2));
+            &.with-header {
+                padding: 0 $chat-padding;
+                top: $header-height + $header-padding * 2 + $chat-padding;
+                height: calc(100% - ($header-height + $header-padding * 2 + $chat-padding * 2));
+            }
         }
     }
-}
 
-.chat 
-{
-    /*
-    position: absolute;
-    top: $header-height + $header-padding * 2 + $chat-padding;
-    padding: 0 $chat-padding;
-    bottom: $chat-padding;
-    overflow: scroll;
-    line-height: 1.5em;
-    */
-    
-    .message {
-        // Name
-        .name {
-            padding-right: 1em;
-            vertical-align: text-top;
-            min-width: 7em;
-            text-align: right;
-            font-weight: bold;
-        }
-
-        // Content
-        .content {
-            overflow-wrap: anywhere;
-            width: 100%;
-
-            a { 
-                color: $color-fuchsia;
-                font-style: italic;
+    .chat 
+    {
+        /*
+        position: absolute;
+        top: $header-height + $header-padding * 2 + $chat-padding;
+        padding: 0 $chat-padding;
+        bottom: $chat-padding;
+        overflow: scroll;
+        line-height: 1.5em;
+        */
+        
+        .message {
+            // Name
+            .name {
+                padding-right: 1em;
+                vertical-align: text-top;
+                min-width: 7em;
+                text-align: right;
+                font-weight: bold;
             }
 
-            .embeds {
-                video, img { 
-                    width: fit-content;
-                    max-height: 33vh; 
-                    border-radius: 5px; 
-                }
-            }
-
-            .markdown {
-                // Highlight code
-                pre, code
-                {
-                    background: $color-dark-gray;
-                    padding: 2px;
-                    border-radius: 3px;
-                }
-
-                pre 
-                {
-                    width: 75vw;
-                    border: 1px solid $color-off-black;
-                    padding: 4px;
-                }
-
-                // Highlight mentions
-                .mention, .mention a {
-                    border-radius: 3px;
-                    background: transparentize($color-blurple, 1-0.30);
-                    color: $color-off-white;
-                    padding: 5px;
-                    font-weight: bold;
-                }
-
-                // If we are only images make it bigger
-                &.image-only {
-                    .d-emoji { height: 4em; }
-                }
-            }
-                      
-            .reactions {
-                .reaction {
-                    float: left;
-                    padding: 0px 5px;
-                    border-radius: 5px;
-                    border: 1px solid $color-blurple;
-                    background: transparentize($color-blurple, 1-0.30);
-                    color: $color-off-white;
-                    margin-right: 0.25em;
-                }
-                .emote {
-                    height: 1em;
-                    width: 1em;
-                    vertical-align: middle;
-                    margin-right: 0.25em;
-                    margin-top: -2px;
-                }
-                .count {
-                    text-align: right;
-                    margin: auto;
-                }
-            }
-
-            .reply {
-                display: none;
-                opacity: 0.5;
-                margin-top: -$reply-offset;
-                height: $reply-offset;
-                width: 100%;
-                overflow: hidden;                
-            }
-
-            .d-emoji {
-                height: 1.5em;
-                vertical-align: middle;
-            }
-        }
-
-        // REPLIES
-        &[type="19"] {
-            & > .name, & > .content { padding-top: $reply-offset; }
-
+            // Content
             .content {
-                .reply { 
-                    display: block;
-                    .d-emoji {
-                        height: 1em;
-                        vertical-align: middle;
+                overflow-wrap: anywhere;
+                width: 100%;
+
+                a { 
+                    color: $color-fuchsia;
+                    font-style: italic;
+                }
+
+                .embeds {
+                    video, img { 
+                        width: fit-content;
+                        max-height: 33vh; 
+                        border-radius: 5px; 
+                    }
+                }
+
+                .markdown {
+                    // Highlight code
+                    pre, code
+                    {
+                        background: $color-dark-gray;
+                        padding: 2px;
+                        border-radius: 3px;
                     }
 
-                    .name, .content { 
-                        padding: 0; 
-                        height: 1em;
-                        text-align: left;
-                        float: left;
+                    pre 
+                    {
+                        width: 75vw;
+                        border: 1px solid $color-off-black;
+                        padding: 4px;
                     }
 
-                    .content {
-                        width: 70vw;
-                        height: 1.1em;
-                        overflow: hidden;
+                    // Highlight mentions
+                    .mention, .mention a {
+                        border-radius: 3px;
+                        background: transparentize($color-blurple, 1-0.30);
+                        color: $color-off-white;
+                        padding: 5px;
+                        font-weight: bold;
                     }
-                    
-                    & > .name::before {
-                        content: '↩';
-                        display: inline-block;
-                        width: 16px;
-                        height: 16px;
-                        color: white;
-                        border-radius: 100%;
-                        margin-right: 6px;
+
+                    // If we are only images make it bigger
+                    &.image-only {
+                        .d-emoji { height: 4em; }
+                    }
+                }
+                       
+                .reply {
+                    display: none;
+                    opacity: 0.5;
+                    margin-top: -$reply-offset;
+                    height: $reply-offset;
+                    width: 100%;
+                    overflow: hidden;                
+                }
+
+                .d-emoji {
+                    height: 1.5em;
+                    vertical-align: middle;
+                }
+            }
+
+            // REPLIES
+            &[type="19"] {
+                & > .name, & > .content { padding-top: $reply-offset; }
+
+                .content {
+                    .reply { 
+                        display: block;
+                        .d-emoji {
+                            height: 1em;
+                            vertical-align: middle;
+                        }
+
+                        .name, .content { 
+                            padding: 0; 
+                            height: 1em;
+                            text-align: left;
+                            float: left;
+                        }
+
+                        .content {
+                            width: 70vw;
+                            height: 1.1em;
+                            overflow: hidden;
+                        }
+                        
+                        & > .name::before {
+                            content: '↩';
+                            display: inline-block;
+                            width: 16px;
+                            height: 16px;
+                            color: white;
+                            border-radius: 100%;
+                            margin-right: 6px;
+                        }
                     }
                 }
             }

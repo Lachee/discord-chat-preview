@@ -1,50 +1,57 @@
-import './FullMode.scss';
+import './FlexMode.scss';
 import $ from 'cash-dom';
-import { BaseMode, autoScroll, copyElement, markdown, trimEmoji, createOptionsFromURLSearchParams } from './BaseMode.js';
+import { autoScroll, BaseMode, copyElement, markdown, trimEmoji } from './BaseMode.js';
 import { tagEmote } from '../markdown.js';
 
-export class FullMode extends BaseMode {
+export class FlexMode extends BaseMode {
 
     /** @type {Element} the dom container */
-    container;
+    container;    
     /** @type {Element} container for the channel name */
     channelNameContainer;
 
+    previousMessage;
+
+    /** Initializes the default box */
     initialize(parent) {
-        console.log('initialize full mode');
-        $('<table class="chat-container"><thead><tr><th></th><th></th></tr></thead><tbody class="chat chat-full" id="chat"></tbody></table>').appendTo(parent);
-        this.container = $('#chat').get(0);
-        
+        $('<div class="chat-container"></div>').appendTo('body');
+        this.container = $('.chat-container').get(0);
+        console.log(this.container);
         if (this.options.showChannelName)
             $(this.container).addClass('with-header');
-
-        $('body').addClass('full');
+    
+        $('body').addClass('flex');
     }
 
-    createChannelName(channel) {
-        if (this.channelNameContainer)
-            this.channelNameContainer.remove();
-
-        this.channelNameContainer = $('<div class="header"><div class="name"></div></div>')
-            .prependTo(document.body)
-            .get();
-    }
-    updateChannelName(channel) {
-        if (!this.options.showChannelName) 
-            return;
-
-        if (this.channelNameContainer == null) 
-            this.createChannelName(channel);
-        
-        $(this.channelNameContainer).find('.name').text(channel.name);
-        this.scroll();
-    }
-
+    /** Creates a new message then updates it with content */
     createMessage(message) {
-        const msg = $(`<tr class="message" id="${message.id}" type="${message.type}"></tr>`).appendTo(this.container).get(0);
-        $('<td class="name"></td><td class="content"><div class="reply"></div><div class="markdown"></div><div class="embeds"></div><div class="reactions"></div></td>').appendTo(msg);
-        this.updateMessage(message);    
+        const msg =     $(`<div class="message" id="${message.id}" type="${message.type}"></div>`)
+                            .appendTo(this.container)
+                            .get(0);
+        
+        $('<div class="row reply"></div>').appendTo(msg);
+        $('<div class="row name"></div>').appendTo(msg);
+        $('<div class="row content"></div>').appendTo(msg);
+        $('<div class="row embeds"></div>').appendTo(msg);
+        $('<div class="row reactions"></div>').appendTo(msg);
+        this.updateMessage(message);
+        this.scroll();
+
+        // Auto hide names 
+        if (this.previousMessage != null && 
+            message.id != this.previousMessage.id && 
+            message.member.id == this.previousMessage.member.id &&
+            message.reference == null) 
+        {
+            $(`#${message.id}`)
+                .find('.name')
+                .css('display', 'none');
+        }
+        
+        this.previousMessage = message;
     }
+
+    /** Updates an existing message */
     updateMessage(message) {
         const { id, member, reference , embeds } = message;
 
@@ -53,23 +60,23 @@ export class FullMode extends BaseMode {
         $(`#${id}`).find('.name')
             .text(name)
             .css({ color: member.color === '#000000' ? 'inherit' : member.color });
-    
+            
         // Write the markdown
         if (this.options.allowMarkdown) {
-            $(`#${id}`).find('.content > .markdown')
+            $(`#${id}`).find('.content')
                 .html(markdown(message));
         } else {
-            $(`#${id}`).find('.content > .markdown')
+            $(`#${id}`).find('.content')
                 .text(message.content);
         }
-            
-        // If the content is only image tags then apply
-        $(`#${id}`).find('.content > .markdown').removeClass('image-only');
-        if (this.options.allowBigEmotes && $(`#${id}`).find('.content > .markdown').text().trim().length == 0)
-            $(`#${id}`).find('.content > .markdown').addClass('image-only');
-    
+        
+         // If the content is only image tags then apply
+         $(`#${id}`).find('.content').removeClass('image-only');
+         if (this.options.allowBigEmotes && $(`#${id}`).find('.content').text().trim().length == 0)
+            $(`#${id}`).find('.content').addClass('image-only');
+     
         // Setup the reply
-        const replyContainer = $(`#${id}`).find('.content > .reply');
+        const replyContainer = $(`#${id}`).find('.reply');
         replyContainer.html('').attr('ref', reference);
         if (this.options.allowReplies) {
             if (reference) {
@@ -88,7 +95,8 @@ export class FullMode extends BaseMode {
         }
 
         // Setup the embeds 
-        const embedContainer = $(`#${id}`).find('.content > .embeds');
+        let foundEmbed = false;
+        const embedContainer = $(`#${id}`).find('.embeds');
         embedContainer.html('');
         if (this.options.allowEmbeds) {
             for(let embed of embeds) {
@@ -115,50 +123,91 @@ export class FullMode extends BaseMode {
                         $(`<video autoplay loop muted src="${videoURL}"></video>`)
                             .one('play', () => { this.scroll(); })
                             .appendTo(embedContainer);
+                        foundEmbed = true;
                     }
                 } else if (thumbnailURL) {
                     $(`<img src="${thumbnailURL}"></img>`)
                         .one('load', () => { this.scroll(); })
                         .appendTo(embedContainer);
+                    foundEmbed = true;
                 } else {
                     console.warn("Failed to create the embed as it doesnt contain a video or thumbnail:", embed);
                 }
             }
         }
     
-        // Autoscroll
-        this.scroll();
+        // Fix content if it is only a link and we have a embed
+        if (foundEmbed && tryGetURL(message.content) !== false) {
+            $(`#${id}`).find('.content').addClass('embed-only');
+        }
     }
     
+    /** Deletes a message */
     deleteMessage(message) {
-        const {id} = message;
-        $(`#${id}`).remove();
-        this.scroll();
+        $(`#${message.id}`).remove();
     }
-    
+
+    /** Updates a reaction */
     updateReaction(reaction) {
         if (!this.options.allowReactions)
-            return;
+                return;
 
         const {id, emote, count} = reaction;
-    
+
         // If it doesnt exist then we will add one
-        let query = $(`#${id}`).find('.content .reactions').find(`[data-id="${emote.identifier}"]`);
+        let query = $(`#${id}`).find('.reactions').find(`[data-id="${emote.identifier}"]`);
         if (count == 0) {
             query.remove();
         } else {
             if (query.length == 0) {        
-                $(`<div class="reaction" data-id="${emote.identifier}">${tagEmote(emote)}<span class="count">1</span></div>`).appendTo($(`#${id}`).find('.content .reactions'));
-                query = $(`#${id}`).find('.content .reactions').find(`[data-id="${emote.identifier}"]`); 
+                $(`<div class="reaction" data-id="${emote.identifier}">${tagEmote(emote)}<span class="count">1</span></div>`).appendTo($(`#${id}`).find('.reactions'));
+                query = $(`#${id}`).find('.reactions').find(`[data-id="${emote.identifier}"]`); 
             }
             query.find('.count').text(count);
         }
+        
         this.scroll();
     }
 
+    
+    createChannelName(channel) {
+        if (this.channelNameContainer)
+            this.channelNameContainer.remove();
+
+        this.channelNameContainer = $('<div class="header"><div class="name"></div></div>')
+            .prependTo(document.body)
+            .get();
+    }
+
+    updateChannelName(channel) {
+        if (!this.options.showChannelName) 
+            return;
+
+        if (this.channelNameContainer == null) 
+            this.createChannelName(channel);
+        
+        $(this.channelNameContainer).find('.name').text(channel.name);
+        this.scroll();
+    }
+    
     scroll() {
         if (!this.options.autoScroll)
             return false;
-        autoScroll(this.container);
+        try {
+            document.body.scrollTo({
+                top: 99_999_999,
+                behavior: 'smooth'
+            });
+        }catch(error) {
+            console.error(error, element);
+        }
+    }
+}
+
+function tryGetURL(str) {
+    try {
+        return new URL(str);
+    } catch(_) {
+        return false;
     }
 }

@@ -16,6 +16,8 @@ export class CompactMode extends FullMode {
 
         if (this.options.showChannelName)
             $(this.container).addClass('with-header');
+    
+        $('body').addClass('full').addClass('compact');
     }
 
     /** Creates a new message then updates it with content */
