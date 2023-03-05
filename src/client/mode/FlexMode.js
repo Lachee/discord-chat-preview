@@ -6,7 +6,9 @@ import { tagEmote } from '../markdown.js';
 export class FlexMode extends BaseMode {
 
     /** @type {Element} the dom container */
-    container;
+    container;    
+    /** @type {Element} container for the channel name */
+    channelNameContainer;
 
     previousMessage;
 
@@ -33,6 +35,20 @@ export class FlexMode extends BaseMode {
         $('<div class="row embeds"></div>').appendTo(msg);
         $('<div class="row reactions"></div>').appendTo(msg);
         this.updateMessage(message);
+        this.scroll();
+
+        // Auto hide names 
+        if (this.previousMessage != null && 
+            message.id != this.previousMessage.id && 
+            message.member.id == this.previousMessage.member.id &&
+            message.reference == null) 
+        {
+            $(`#${message.id}`)
+                .find('.name')
+                .css('display', 'none');
+        }
+        
+        this.previousMessage = message;
     }
 
     /** Updates an existing message */
@@ -149,14 +165,42 @@ export class FlexMode extends BaseMode {
             }
             query.find('.count').text(count);
         }
+        
         this.scroll();
     }
 
     
+    createChannelName(channel) {
+        if (this.channelNameContainer)
+            this.channelNameContainer.remove();
+
+        this.channelNameContainer = $('<div class="header"><div class="name"></div></div>')
+            .prependTo(document.body)
+            .get();
+    }
+
+    updateChannelName(channel) {
+        if (!this.options.showChannelName) 
+            return;
+
+        if (this.channelNameContainer == null) 
+            this.createChannelName(channel);
+        
+        $(this.channelNameContainer).find('.name').text(channel.name);
+        this.scroll();
+    }
+    
     scroll() {
         if (!this.options.autoScroll)
             return false;
-        autoScroll(this.container);
+        try {
+            document.body.scrollTo({
+                top: 99_999_999,
+                behavior: 'smooth'
+            });
+        }catch(error) {
+            console.error(error, element);
+        }
     }
 }
 

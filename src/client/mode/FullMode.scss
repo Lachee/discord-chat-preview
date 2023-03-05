@@ -7,24 +7,6 @@ $chat-padding: 10px;
 html { overflow: hidden; }
 
 .full {
-    .header 
-    {
-
-        font-size: 1em;
-        font-weight: bold;
-        width: 100%;
-        height: $header-height;
-        background-color: $color-off-black;
-        padding: $header-padding;
-        position: fixed;
-
-
-        .name::before {
-            content: '#';
-            color: $color-text;
-        }
-    }
-
     .chat-container {
         top: 0;
         left: 0;
