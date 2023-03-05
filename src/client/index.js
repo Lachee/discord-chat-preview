@@ -5,6 +5,7 @@ import $ from "cash-dom";
 import { BaseMode, createOptionsFromURLSearchParams } from './mode/BaseMode.js';
 import { FullMode } from './mode/FullMode.js';
 import { CompactMode } from './mode/CompactMode.js';
+import { FlexMode } from './mode/FlexMode.js';
 
 const LOG_PING_PONG = false;
 
@@ -46,14 +47,18 @@ function initializeMode() {
     
     const options = createOptionsFromURLSearchParams(params);
     console.log('initialize mode with options: ', options);
-    switch(params.get('mode') || 'compact') {
+    switch(params.get('mode')) {
         case 'full':
             currentMode = new FullMode(options);
             break;
-            
-        default:
+
         case 'compact':
             currentMode = new CompactMode(options);
+            break;
+            
+        default:
+        case 'flex':
+            currentMode = new FlexMode(options);
             break;
     }
     currentMode.initialize(document.body);

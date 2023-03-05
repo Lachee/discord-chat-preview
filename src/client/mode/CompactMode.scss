@@ -1,40 +1,42 @@
 @import "../theme.scss";
 @import './FullMode.scss';
 
-.chat.chat-compact {
-    position: absolute;
-    overflow: scroll;
-    font-size: 9pt;
-    line-height: 1.5em;
+.compact {
+    .chat.chat-compact {
+        position: absolute;
+        overflow: scroll;
+        font-size: 9pt;
+        line-height: 1.5em;
 
-    padding: 0 $chat-padding;
-    top: $chat-padding;
-    bottom: $chat-padding;
-    &.with-header {
-        top: $header-height + $header-padding * 2 + $chat-padding;
-    }
-
-
-    .message {
-        display: inline-block;
-        width: 100%;
-        
-        .name {
-            text-align: left;
-            min-width: fit-content;
-            float: left;
-
-        
+        padding: 0 $chat-padding;
+        top: $chat-padding;
+        bottom: $chat-padding;
+        &.with-header {
+            top: $header-height + $header-padding * 2 + $chat-padding;
         }
 
-        .content {
-            float: left;
-        }
-    }
 
-    // This padding is to override the message tpye  padding
-    .message[type="19"] {
-        > .name { padding: 0; }
-        .reply > .content { height: 0 !important; }
+        .message {
+            display: inline-block;
+            width: 100%;
+            
+            .name {
+                text-align: left;
+                min-width: fit-content;
+                float: left;
+
+            
+            }
+
+            .content {
+                float: left;
+            }
+        }
+
+        // This padding is to override the message tpye  padding
+        .message[type="19"] {
+            > .name { padding: 0; }
+            .reply > .content { height: 0 !important; }
+        }
     }
 }

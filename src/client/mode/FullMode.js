@@ -17,6 +17,8 @@ export class FullMode extends BaseMode {
         
         if (this.options.showChannelName)
             $(this.container).addClass('with-header');
+
+        $('body').addClass('full');
     }
 
     createChannelName(channel) {
