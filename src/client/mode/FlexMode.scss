@@ -1,5 +1,9 @@
 @import "../theme.scss";
 .flex {
+    --embed-height: 50vh;
+    --emote-height: 32px;
+    --emote-big-height: 7em;
+
     overflow-y: scroll;
     height: 100vh;
     
@@ -18,8 +22,17 @@
         .content {
             font-size: 9pt;
             &.embed-only { display: none; }
-            &.image-only { text-align: center; }
+            .d-emoji {
+                height: var(--emote-height);
+                vertical-align: middle;
+            }
+
+            &.image-only .d-emoji {
+                align-items: left;
+                height: var(--emote-big-height)
+            }
         }
+        
 
         .name {
             font-size: 11pt;
@@ -34,7 +47,7 @@
 
             video, img {
                 max-width: 100%;
-                max-height: 50vh;
+                max-height: var(--embed-height);
             }
         }
 

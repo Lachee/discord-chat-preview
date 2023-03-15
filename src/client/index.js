@@ -76,6 +76,7 @@ function now()
  */
 function processMessage(message) {
     const { origin, data, content } = typeof(message) === 'string' ? JSON.parse(message) : message;
+    //console.log(message);
     switch(origin) {
         case 'system':
             console.log('[SERVER]', content);
