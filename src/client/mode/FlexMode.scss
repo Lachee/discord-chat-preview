@@ -59,6 +59,10 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
+            
+            --emote-height: 1em;
+            --emote-big-height: 1em;
+
             .name, .content { font-size: 8pt; }
             .name {
                 margin-right: 10px;
