@@ -70,7 +70,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/noSourceMaps.js */ \"./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/noSourceMaps.js\");\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/api.js\");\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);\n// Imports\n\n\nvar ___CSS_LOADER_EXPORT___ = _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));\n// Module\n___CSS_LOADER_EXPORT___.push([module.id, \"@charset \\\"UTF-8\\\";\\n.flex {\\n  --embed-height: 50vh;\\n  --emote-height: 32px;\\n  --emote-big-height: 7em;\\n  overflow-y: scroll;\\n  height: 100vh;\\n}\\n.flex .chat-container {\\n  display: grid;\\n  padding: 10px;\\n  grid-gap: 0.5em;\\n  padding-top: 50px;\\n}\\n.flex .message {\\n  display: flex;\\n  flex-direction: column;\\n}\\n.flex .message .content {\\n  font-size: 9pt;\\n}\\n.flex .message .content.embed-only {\\n  display: none;\\n}\\n.flex .message .content .d-emoji {\\n  height: var(--emote-height);\\n  vertical-align: middle;\\n}\\n.flex .message .content.image-only .d-emoji {\\n  align-items: left;\\n  height: var(--emote-big-height);\\n}\\n.flex .message .name {\\n  font-size: 11pt;\\n}\\n.flex .message .embeds {\\n  display: flex;\\n  object-fit: cover;\\n  align-items: center;\\n  align-content: center;\\n  justify-content: center;\\n}\\n.flex .message .embeds video, .flex .message .embeds img {\\n  max-width: 100%;\\n  max-height: var(--embed-height);\\n}\\n.flex .message .reactions {\\n  padding-top: 2px;\\n}\\n.flex .message .reply {\\n  display: flex;\\n  flex-direction: row;\\n  justify-content: flex-start;\\n}\\n.flex .message .reply .name, .flex .message .reply .content {\\n  font-size: 8pt;\\n}\\n.flex .message .reply .name {\\n  margin-right: 10px;\\n}\\n.flex .message .reply .name::before {\\n  content: \\\"↩\\\";\\n  margin-right: 4px;\\n  color: gray;\\n}\\n.flex .message .reply .content {\\n  color: gray;\\n}\", \"\"]);\n// Exports\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);\n\n\n//# sourceURL=webpack://discord-chat-preview/./src/client/mode/FlexMode.scss?./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/cjs.js!./node_modules/.pnpm/sass-loader@13.2.0_sass@1.58.3+webpack@5.75.0/node_modules/sass-loader/dist/cjs.js");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/noSourceMaps.js */ \"./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/noSourceMaps.js\");\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/runtime/api.js\");\n/* harmony import */ var _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);\n// Imports\n\n\nvar ___CSS_LOADER_EXPORT___ = _node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_pnpm_css_loader_6_7_3_webpack_5_75_0_node_modules_css_loader_dist_runtime_noSourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));\n// Module\n___CSS_LOADER_EXPORT___.push([module.id, \"@charset \\\"UTF-8\\\";\\n.flex {\\n  --embed-height: 50vh;\\n  --emote-height: 32px;\\n  --emote-big-height: 7em;\\n  overflow-y: scroll;\\n  height: 100vh;\\n}\\n.flex .chat-container {\\n  display: grid;\\n  padding: 10px;\\n  grid-gap: 0.5em;\\n  padding-top: 50px;\\n}\\n.flex .message {\\n  display: flex;\\n  flex-direction: column;\\n}\\n.flex .message .content {\\n  font-size: 9pt;\\n}\\n.flex .message .content.embed-only {\\n  display: none;\\n}\\n.flex .message .content .d-emoji {\\n  height: var(--emote-height);\\n  vertical-align: middle;\\n}\\n.flex .message .content.image-only .d-emoji {\\n  align-items: left;\\n  height: var(--emote-big-height);\\n}\\n.flex .message .name {\\n  font-size: 11pt;\\n}\\n.flex .message .embeds {\\n  display: flex;\\n  object-fit: cover;\\n  align-items: center;\\n  align-content: center;\\n  justify-content: center;\\n}\\n.flex .message .embeds video, .flex .message .embeds img {\\n  max-width: 100%;\\n  max-height: var(--embed-height);\\n}\\n.flex .message .reactions {\\n  padding-top: 2px;\\n}\\n.flex .message .reply {\\n  display: flex;\\n  flex-direction: row;\\n  justify-content: flex-start;\\n  --emote-height: 1em;\\n  --emote-big-height: 1em;\\n}\\n.flex .message .reply .name, .flex .message .reply .content {\\n  font-size: 8pt;\\n}\\n.flex .message .reply .name {\\n  margin-right: 10px;\\n}\\n.flex .message .reply .name::before {\\n  content: \\\"↩\\\";\\n  margin-right: 4px;\\n  color: gray;\\n}\\n.flex .message .reply .content {\\n  color: gray;\\n}\", \"\"]);\n// Exports\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);\n\n\n//# sourceURL=webpack://discord-chat-preview/./src/client/mode/FlexMode.scss?./node_modules/.pnpm/css-loader@6.7.3_webpack@5.75.0/node_modules/css-loader/dist/cjs.js!./node_modules/.pnpm/sass-loader@13.2.0_sass@1.58.3+webpack@5.75.0/node_modules/sass-loader/dist/cjs.js");
 
 /***/ }),
 
@@ -2227,7 +2227,7 @@ eval("/*\n Language: Zephir\n Description: Zephir, an open source, high-level la
 /***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ \"./src/client/index.scss\");\n/* harmony import */ var _hljs_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hljs.scss */ \"./src/client/hljs.scss\");\n/* harmony import */ var cash_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! cash-dom */ \"./node_modules/.pnpm/cash-dom@8.1.3/node_modules/cash-dom/dist/cash.js\");\n/* harmony import */ var _mode_BaseMode_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mode/BaseMode.js */ \"./src/client/mode/BaseMode.js\");\n/* harmony import */ var _mode_FullMode_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mode/FullMode.js */ \"./src/client/mode/FullMode.js\");\n/* harmony import */ var _mode_CompactMode_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mode/CompactMode.js */ \"./src/client/mode/CompactMode.js\");\n/* harmony import */ var _mode_FlexMode_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mode/FlexMode.js */ \"./src/client/mode/FlexMode.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst LOG_PING_PONG = false;\r\n\r\nconst params = new URLSearchParams(window.location.search);\r\nfunction get(name, defaultValue = null) {\r\n    return params.get(name) ?? defaultValue;\r\n}\r\n\r\n/** @type {BaseMode} current mode */\r\nlet currentMode;\r\n\r\n/** @type {WebSocket} current websocket */\r\nlet currentSocket;\r\n\r\nlet _socketBackoffTimeMS = 1000;\r\n\r\nfunction initializeWebsocket() {\r\n    const protocol = 'ws';\r\n    currentSocket = new WebSocket(`${protocol}://${window.location.host}${window.location.pathname}`);\r\n\r\n    currentSocket.addEventListener('open', function(event) {\r\n        console.log('socket has open');\r\n        _socketBackoffTimeMS = 1000;\r\n    });\r\n\r\n    currentSocket.addEventListener('message', (event) => {\r\n        processMessage(event.data);\r\n    });\r\n\r\n    currentSocket.addEventListener('close', function(event) {\r\n        console.log('socket has closed! Attempting again in ', _socketBackoffTimeMS, 'ms');\r\n        setTimeout(() => initializeWebsocket(), _socketBackoffTimeMS);\r\n        _socketBackoffTimeMS *= 2;\r\n    });\r\n}\r\n\r\nfunction initializeMode() {\r\n    cash_dom__WEBPACK_IMPORTED_MODULE_2__('<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js\"></script>').appendTo(document.head);\r\n    \r\n    const options = (0,_mode_BaseMode_js__WEBPACK_IMPORTED_MODULE_3__.createOptionsFromURLSearchParams)(params);\r\n    console.log('initialize mode with options: ', options);\r\n    switch(params.get('mode')) {\r\n        case 'full':\r\n            currentMode = new _mode_FullMode_js__WEBPACK_IMPORTED_MODULE_4__.FullMode(options);\r\n            break;\r\n\r\n        case 'compact':\r\n            currentMode = new _mode_CompactMode_js__WEBPACK_IMPORTED_MODULE_5__.CompactMode(options);\r\n            break;\r\n            \r\n        default:\r\n        case 'flex':\r\n            currentMode = new _mode_FlexMode_js__WEBPACK_IMPORTED_MODULE_6__.FlexMode(options);\r\n            break;\r\n    }\r\n    currentMode.initialize(document.body);\r\n}\r\n\r\n/** @returns {Number} unix epoch time */\r\nfunction now() \r\n{ \r\n    return Math.floor(+new Date());\r\n}\r\n\r\n/**\r\n * Processes a message received from the socket\r\n * @param {string} message \r\n */\r\nfunction processMessage(message) {\r\n    const { origin, data, content } = typeof(message) === 'string' ? JSON.parse(message) : message;\r\n    //console.log(message);\r\n    switch(origin) {\r\n        case 'system':\r\n            console.log('[SERVER]', content);\r\n            break;\r\n\r\n        case 'ping':\r\n            if (currentSocket != null) {\r\n                const { time, /* respondBy, delay */ } = data;\r\n                const latency = (now() - time);\r\n                if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓', latency + \"ms\");\r\n                currentSocket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));\r\n            }\r\n            break;\r\n\r\n        case 'discord':\r\n            console.log('[DISCORD]', content, data);\r\n            if (currentMode != null) {\r\n                switch(content) {\r\n                    default:\r\n                        console.warn('unkown discord mode', content, data);\r\n                        break;\r\n                    case 'channel.update':\r\n                        currentMode.updateChannelName(data);\r\n                        break;\r\n                    case 'message.create':\r\n                        currentMode.createMessage(data);\r\n                        break;\r\n                    case 'message.edit':\r\n                        currentMode.updateMessage(data);\r\n                        break;\r\n                    case 'message.delete':\r\n                        currentMode.deleteMessage(data);\r\n                        break;\r\n                    case 'reaction.add':\r\n                    case 'reaction.remove':\r\n                        currentMode.updateReaction(data);\r\n                        break;\r\n                }\r\n            }\r\n            break;\r\n\r\n        default:\r\n            console.warn('[UNKOWN]', origin, data, content);\r\n            break;\r\n\r\n    }\r\n};\r\n\r\n/**\r\n * Processes an array of message objects with an optional delay\r\n * @param {Array} messages \r\n * @param {*} delay \r\n */\r\nfunction processMessages(messages, delay = 0) {\r\n    let time = 0;\r\n    for(const msg of messages) {\r\n        time += delay;\r\n        if (time > 0) {\r\n            setTimeout(() => processMessage(msg), time);\r\n        } else {\r\n            processMessage(msg);\r\n        }\r\n    }\r\n}\r\n\r\ndocument.addEventListener('DOMContentLoaded', () => {\r\n    \r\n    // Set the body configuration\r\n    if (params.has('transparent'))\r\n        cash_dom__WEBPACK_IMPORTED_MODULE_2__('body').addClass('transparent');\r\n\r\n    initializeMode();\r\n    initializeWebsocket();\r\n    document.simulateDiscordMessages = processMessages;\r\n});\n\n//# sourceURL=webpack://discord-chat-preview/./src/client/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ \"./src/client/index.scss\");\n/* harmony import */ var _hljs_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hljs.scss */ \"./src/client/hljs.scss\");\n/* harmony import */ var cash_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! cash-dom */ \"./node_modules/.pnpm/cash-dom@8.1.3/node_modules/cash-dom/dist/cash.js\");\n/* harmony import */ var _mode_BaseMode_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mode/BaseMode.js */ \"./src/client/mode/BaseMode.js\");\n/* harmony import */ var _mode_FullMode_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mode/FullMode.js */ \"./src/client/mode/FullMode.js\");\n/* harmony import */ var _mode_CompactMode_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mode/CompactMode.js */ \"./src/client/mode/CompactMode.js\");\n/* harmony import */ var _mode_FlexMode_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mode/FlexMode.js */ \"./src/client/mode/FlexMode.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nconst LOG_PING_PONG = false;\r\n\r\nconst params = new URLSearchParams(window.location.search);\r\nfunction get(name, defaultValue = null) {\r\n    return params.get(name) ?? defaultValue;\r\n}\r\n\r\n/** @type {BaseMode} current mode */\r\nlet currentMode;\r\n\r\n/** @type {WebSocket} current websocket */\r\nlet currentSocket;\r\n\r\nlet _socketBackoffTimeMS = 1000;\r\n\r\nfunction initializeWebsocket() {\r\n    const protocol = 'ws';\r\n    currentSocket = new WebSocket(`${protocol}://${window.location.host}${window.location.pathname}`);\r\n\r\n    currentSocket.addEventListener('open', function(event) {\r\n        console.log('socket has open');\r\n        _socketBackoffTimeMS = 1000;\r\n    });\r\n\r\n    currentSocket.addEventListener('message', (event) => {\r\n        processMessage(event.data);\r\n    });\r\n\r\n    currentSocket.addEventListener('close', function(event) {\r\n        console.log('socket has closed! Attempting again in ', _socketBackoffTimeMS, 'ms');\r\n        setTimeout(() => initializeWebsocket(), _socketBackoffTimeMS);\r\n        _socketBackoffTimeMS *= 2;\r\n    });\r\n}\r\n\r\nfunction initializeMode() {\r\n    cash_dom__WEBPACK_IMPORTED_MODULE_2__('<script src=\"https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js\"></script>').appendTo(document.head);\r\n    \r\n    const options = (0,_mode_BaseMode_js__WEBPACK_IMPORTED_MODULE_3__.createOptionsFromURLSearchParams)(params);\r\n    console.log('initialize mode with options: ', options);\r\n    switch(params.get('mode')) {\r\n        case 'full':\r\n            currentMode = new _mode_FullMode_js__WEBPACK_IMPORTED_MODULE_4__.FullMode(options);\r\n            break;\r\n\r\n        case 'compact':\r\n            currentMode = new _mode_CompactMode_js__WEBPACK_IMPORTED_MODULE_5__.CompactMode(options);\r\n            break;\r\n            \r\n        default:\r\n        case 'flex':\r\n            currentMode = new _mode_FlexMode_js__WEBPACK_IMPORTED_MODULE_6__.FlexMode(options);\r\n            break;\r\n    }\r\n    currentMode.initialize(document.body);\r\n}\r\n\r\n/** @returns {Number} unix epoch time */\r\nfunction now() \r\n{ \r\n    return Math.floor(+new Date());\r\n}\r\n\r\n/**\r\n * Processes a message received from the socket\r\n * @param {string} message \r\n */\r\nfunction processMessage(message) {\r\n    const { origin, data, content } = typeof(message) === 'string' ? JSON.parse(message) : message;\r\n    //console.log(message);\r\n    switch(origin) {\r\n        case 'system':\r\n            console.log('[SERVER]', content);\r\n            break;\r\n\r\n        case 'ping':\r\n            if (currentSocket != null) {\r\n                const { time, /* respondBy, delay */ } = data;\r\n                const latency = (now() - time);\r\n                if (LOG_PING_PONG) console.log(Date.now(), 'PONG 🏓', latency + \"ms\");\r\n                currentSocket.send(JSON.stringify({origin: 'client', data: null, content: '🏓 PONG!'}));\r\n            }\r\n            break;\r\n\r\n        case 'discord':\r\n            console.log('[DISCORD]', content, data);\r\n            if (currentMode != null) {\r\n                switch(content) {\r\n                    default:\r\n                        console.warn('unkown discord mode', content, data);\r\n                        break;\r\n                    case 'channel.update':\r\n                        currentMode.updateChannelName(data);\r\n                        break;\r\n                    case 'message.create':\r\n                        currentMode.createMessage(data);\r\n                        break;\r\n                    case 'message.edit':\r\n                        currentMode.updateMessage(data);\r\n                        break;\r\n                    case 'message.delete':\r\n                        currentMode.deleteMessage(data);\r\n                        break;\r\n                    case 'reaction.add':\r\n                    case 'reaction.remove':\r\n                        currentMode.updateReaction(data);\r\n                        break;\r\n                }\r\n            }\r\n            break;\r\n\r\n        default:\r\n            console.warn('[UNKOWN]', origin, data, content);\r\n            break;\r\n\r\n    }\r\n};\r\n\r\n/**\r\n * Processes an array of message objects with an optional delay\r\n * @param {Array} messages \r\n * @param {*} delay \r\n */\r\nfunction processMessages(messages, delay = 0) {\r\n    let time = 0;\r\n    for(const msg of messages) {\r\n        time += delay;\r\n        if (time > 0) {\r\n            setTimeout(() => processMessage(msg), time);\r\n        } else {\r\n            processMessage(msg);\r\n        }\r\n    }\r\n}\r\n\r\n\r\ndocument.addEventListener('DOMContentLoaded', async () => {\r\n    \r\n    // Set the body configuration\r\n    if (params.has('transparent'))\r\n        cash_dom__WEBPACK_IMPORTED_MODULE_2__('body').addClass('transparent');\r\n\r\n    initializeMode();\r\n    initializeWebsocket();\r\n    \r\n    document.simulateMessage = processMessage;\r\n\r\n    // Try to use the test data\r\n    try {\r\n        const {data} = await __webpack_require__.e(/*! import() */ \"sample_js\").then(__webpack_require__.bind(__webpack_require__, /*! ../../sample.js */ \"./sample.js\"));\r\n        console.log('Performing test with data', data);\r\n        processMessages(data, 1);\r\n    } catch(_) { \r\n        // throw out the error because this is only used for testing.\r\n    }\r\n});\n\n//# sourceURL=webpack://discord-chat-preview/./src/client/index.js?");
 
 /***/ }),
 
@@ -2312,6 +2312,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
@@ -2337,9 +2340,88 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/ensure chunk */
+/******/ 	(() => {
+/******/ 		__webpack_require__.f = {};
+/******/ 		// This file contains only the entry chunk.
+/******/ 		// The chunk loading function for additional chunks
+/******/ 		__webpack_require__.e = (chunkId) => {
+/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
+/******/ 				__webpack_require__.f[key](chunkId, promises);
+/******/ 				return promises;
+/******/ 			}, []));
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + ".bundle.js";
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/load script */
+/******/ 	(() => {
+/******/ 		var inProgress = {};
+/******/ 		var dataWebpackPrefix = "discord-chat-preview:";
+/******/ 		// loadScript function to load a script via script tag
+/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
+/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
+/******/ 			var script, needAttach;
+/******/ 			if(key !== undefined) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				for(var i = 0; i < scripts.length; i++) {
+/******/ 					var s = scripts[i];
+/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
+/******/ 				}
+/******/ 			}
+/******/ 			if(!script) {
+/******/ 				needAttach = true;
+/******/ 				script = document.createElement('script');
+/******/ 		
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 				script.src = url;
+/******/ 			}
+/******/ 			inProgress[url] = [done];
+/******/ 			var onScriptComplete = (prev, event) => {
+/******/ 				// avoid mem leaks in IE.
+/******/ 				script.onerror = script.onload = null;
+/******/ 				clearTimeout(timeout);
+/******/ 				var doneFns = inProgress[url];
+/******/ 				delete inProgress[url];
+/******/ 				script.parentNode && script.parentNode.removeChild(script);
+/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
+/******/ 				if(prev) return prev(event);
+/******/ 			};
+/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
+/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
+/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
+/******/ 			needAttach && document.head.appendChild(script);
+/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -2351,6 +2433,116 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"main": 0
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
+/******/ 				// JSONP chunk loading for javascript
+/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
+/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
+/******/ 		
+/******/ 					// a Promise means "currently loading".
+/******/ 					if(installedChunkData) {
+/******/ 						promises.push(installedChunkData[2]);
+/******/ 					} else {
+/******/ 						if(true) { // all chunks have JS
+/******/ 							// setup Promise in chunk cache
+/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							promises.push(installedChunkData[2] = promise);
+/******/ 		
+/******/ 							// start chunk loading
+/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
+/******/ 							// create error before stack unwound to get useful stacktrace later
+/******/ 							var error = new Error();
+/******/ 							var loadingEnded = (event) => {
+/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
+/******/ 									installedChunkData = installedChunks[chunkId];
+/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
+/******/ 									if(installedChunkData) {
+/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 										var realSrc = event && event.target && event.target.src;
+/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 										error.name = 'ChunkLoadError';
+/******/ 										error.type = errorType;
+/******/ 										error.request = realSrc;
+/******/ 										installedChunkData[1](error);
+/******/ 									}
+/******/ 								}
+/******/ 							};
+/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
+/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 					}
+/******/ 				}
+/******/ 		};
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 		
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkdiscord_chat_preview"] = self["webpackChunkdiscord_chat_preview"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/nonce */

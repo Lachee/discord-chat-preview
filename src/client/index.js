@@ -151,6 +151,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initializeMode();
     initializeWebsocket();
+    
+    document.simulateMessage = processMessage;
 
     // Try to use the test data
     try {
