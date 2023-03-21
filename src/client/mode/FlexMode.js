@@ -89,6 +89,8 @@ export class FlexMode extends BaseMode {
                     copyElement($(refs).find('.content'), contentcon);
                 }
             }
+
+            replyContainer.find('.name').css({display: 'inherit'});
         } else {
             // Fix the reply width if we cannot allow replies
             $(`#${id}`).attr("type", 0);
