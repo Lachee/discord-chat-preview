@@ -60,3 +60,6 @@ If you fork this package and make changes to how it renders, you need to rebuild
 ```
 npx webpack
 ```
+
+# Sample Data
+to test you can run sample data. Add a `sample.js` that exports a array called `data` with your records. Then build your UI. This will automatically load.

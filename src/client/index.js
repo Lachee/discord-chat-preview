@@ -142,7 +142,8 @@ function processMessages(messages, delay = 0) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', async () => {
     
     // Set the body configuration
     if (params.has('transparent'))
@@ -150,5 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeMode();
     initializeWebsocket();
-    document.simulateDiscordMessages = processMessages;
+
+    // Try to use the test data
+    try {
+        const {data} = await import('../../sample.js');
+        console.log('Performing test with data', data);
+        processMessages(data, 1);
+    } catch(_) { 
+        // throw out the error because this is only used for testing.
+    }
 });
