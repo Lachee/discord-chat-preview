@@ -44,7 +44,8 @@
             align-items: center;
             align-content: center;
             justify-content: center;
-
+            flex-direction: column;
+            
             video, img {
                 max-width: 100%;
                 max-height: var(--embed-height);
