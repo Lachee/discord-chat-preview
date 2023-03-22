@@ -37,3 +37,14 @@
         margin: auto;
     }
 }
+
+.d-spoiler {
+    background: #424549;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+blockquote {
+    padding-left: 8px;
+    border-left: 3px solid $color-off-black;
+}
