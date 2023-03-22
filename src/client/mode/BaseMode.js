@@ -25,6 +25,7 @@ export function createOptionsFromURLSearchParams(params) {
     options.trimEmoji       = checkParamsBoolean(params, 'trim_emoji', false);
     options.showChannelName = checkParamsBoolean(params, 'show_channel', true);
     options.autoScroll      = checkParamsBoolean(params, 'scroll', true);
+    options.showAvatars     = checkParamsBoolean(params, 'avatars', false);
     return options;
 }
 export class Options {
@@ -47,6 +48,8 @@ export class Options {
     showChannelName = true;
     /** @type {Boolean} enables autoscrolling */
     autoScroll = true;
+    /** @type {Boolean} enables avatars on some modes */
+    showAvatars = false;
 }
 
 export class BaseMode {

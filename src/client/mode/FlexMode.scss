@@ -3,6 +3,7 @@
     --embed-height: 50vh;
     --emote-height: 32px;
     --emote-big-height: 7em;
+    --avatar-size: 2em;
 
     overflow-y: scroll;
     height: 100vh;
@@ -13,6 +14,15 @@
         grid-gap: 0.5em;
 
         padding-top: $header-height + $header-padding + 20px;
+
+        &.with-avatars {
+            grid-template-columns: var(--avatar-size) auto;
+        }
+
+        & > .avatar {
+            width: 100%;
+            border-radius: 100%;
+        }
     }
     
     .message {
@@ -45,7 +55,7 @@
             align-content: center;
             justify-content: center;
             flex-direction: column;
-            
+
             video, img {
                 max-width: 100%;
                 max-height: var(--embed-height);

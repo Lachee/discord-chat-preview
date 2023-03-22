@@ -19,12 +19,21 @@ export class FlexMode extends BaseMode {
         console.log(this.container);
         if (this.options.showChannelName)
             $(this.container).addClass('with-header');
-    
+        if (this.options.showAvatars)
+            $(this.container).addClass('with-avatars');
         $('body').addClass('flex');
     }
 
     /** Creates a new message then updates it with content */
     createMessage(message) {
+        if (this.options.showAvatars) {
+            const fallback = new URL(message.member.id, `https://d.lu.je/avatar/`);
+            const url = message.member.avatar ?? fallback;
+            $(`<img class="avatar" x-member="${message.member.id}" ref="${message.id}" src="${url}" />`)
+                .one('error', (e) => { $(e.target).attr('src', fallback); })
+                .appendTo(this.container)
+        }
+
         const msg =     $(`<div class="message" id="${message.id}" type="${message.type}"></div>`)
                             .appendTo(this.container)
                             .get(0);
@@ -46,6 +55,11 @@ export class FlexMode extends BaseMode {
             $(`#${message.id}`)
                 .find('.name')
                 .css('display', 'none');
+
+            if (this.options.showAvatars) {
+                $(`.avatar[ref="${message.id}"]`)
+                    .css('opacity', '0');
+            }
         }
         
         this.previousMessage = message;
