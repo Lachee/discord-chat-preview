@@ -58,7 +58,7 @@ export class FlexMode extends BaseMode {
 
             if (this.options.showAvatars) {
                 $(`.avatar[ref="${message.id}"]`)
-                    .css('opacity', '0');
+                    .css('height', '0');
             }
         }
         
