@@ -49,6 +49,35 @@
                 max-width: 100%;
                 max-height: var(--embed-height);
             }
+
+            .attachment {
+                float: left;
+                padding: 10px;
+                border: 1px solid $color-off-black;
+                border-radius: $border-radius;
+                background: $color-dark-gray;
+                color: $color-off-white;
+                margin-right: 0.25em;
+                display: grid;
+                grid-auto-columns: 1fr;
+                grid-template-columns: 2.5em auto;
+                grid-template-rows: 1fr 1fr;
+                gap: 0px 0px;
+                grid-template-areas:
+                    "icon title    " 
+                    "icon description";
+
+                .icon { grid-area: icon; }
+                .title { 
+                    grid-area: title;
+                    font-size: 11pt;
+                 }
+                .description { 
+                    grid-area: description; 
+                    color: $color-light-gray;
+                    font-size: 9pt;
+                }
+            }
         }
 
         .reactions {
@@ -75,6 +104,32 @@
             .content {
                 color: gray;
             }
+        }
+    }
+}
+
+
+
+.icon {
+    display: inline-block;
+    &.file {
+        aspect-ratio: 1/1.25;
+        width: 2em;
+        background: #cadfff;
+        border-radius: 4px;
+        border-top-right-radius: 15px;
+        clip-path: polygon(0px 0px, 53.75% 0, 100.00% 35.83%, 100% 100%, 0px 100%);
+        
+        &::after {
+            content: '';
+            width: 1em;
+            height: 1em;
+            right: 0;
+            background: #93a3fd;
+            display: block;
+            position: relative;
+            left: calc(100% - 1em);
+            /*! clip-path: polygon(0 0, 0% 100%, 100% 100%); */
         }
     }
 }

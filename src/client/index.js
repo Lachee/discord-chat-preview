@@ -76,7 +76,6 @@ function now()
  */
 function processMessage(message) {
     const { origin, data, content } = typeof(message) === 'string' ? JSON.parse(message) : message;
-    //console.log(message);
     switch(origin) {
         case 'system':
             console.log('[SERVER]', content);
@@ -92,7 +91,8 @@ function processMessage(message) {
             break;
 
         case 'discord':
-            console.log('[DISCORD]', content, data);
+            console.log('[DISCORD]', message);
+            //console.log('[DISCORD]', content, data);
             if (currentMode != null) {
                 switch(content) {
                     default:
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.simulateMessage = processMessage;
 
-    // Try to use the test data
+    //Try to use the test data
     try {
         const {data} = await import('../../sample.js');
         console.log('Performing test with data', data);

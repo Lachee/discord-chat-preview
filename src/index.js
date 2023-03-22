@@ -9,6 +9,7 @@ const Embed = DJS_VERSION == DJS_14 ? djs.Embed : djs.MessageEmbed;
 
 import path from 'path';
 import {fileURLToPath} from 'url';
+import { Attachment } from "discord.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -22,15 +23,32 @@ const CONNECTION_MAX_PONG_DELAY = 5000;
 function convertDiscordMessage(message) {
     if (message == null) return null;
     return { 
-        id:         message.id,
-        type:       message.type,
-        content:    message.content,
-        createdAt:  message.createdAt,
-        editedAt:   message.editedAt,
-        member:     convertDiscordMember(message.member), 
-        mentions:   convertDiscordMentions(message.mentions),
-        embeds:     message.embeds ? message.embeds.map(embed => convertDiscordEmbed(embed)) : [],
-        reference:  message.reference ? message.reference.messageId : null
+        id:             message.id,
+        type:           message.type,
+        content:        message.content,
+        createdAt:      message.createdAt,
+        editedAt:       message.editedAt,
+        member:         convertDiscordMember(message.member), 
+        mentions:       convertDiscordMentions(message.mentions),
+        embeds:         message.embeds ? message.embeds.map(embed => convertDiscordEmbed(embed)) : [],
+        attachments:    message.attachments ? message.attachments.map(att => convertDiscordAttachment(att)) : [],
+        reference:      message.reference ? message.reference.messageId : null
+    }
+}
+
+/**
+ * @param {Attachment} attachment 
+ */
+function convertDiscordAttachment(attachment) {
+    if (attachment == null)     return null;
+    if (attachment.ephemeral)   return null;
+
+    return {
+        id:             attachment.id,
+        title:          attachment.name,
+        description:    attachment.description,
+        url:            attachment.url,
+        type:           attachment.contentType.toLowerCase(),
     }
 }
 

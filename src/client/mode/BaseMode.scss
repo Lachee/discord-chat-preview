@@ -19,7 +19,7 @@
     .reaction {
         float: left;
         padding: 0px 5px;
-        border-radius: 5px;
+        border-radius: $border-radius;
         border: 1px solid $color-blurple;
         background: transparentize($color-blurple, 1-0.30);
         color: $color-off-white;

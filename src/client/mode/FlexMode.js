@@ -53,7 +53,7 @@ export class FlexMode extends BaseMode {
 
     /** Updates an existing message */
     updateMessage(message) {
-        const { id, member, reference , embeds } = message;
+        const { id, member, reference , embeds, attachments } = message;
 
         // Write the name
         const name = this.options.trimEmoji ? trimEmoji(member.name) : member.name;
@@ -101,39 +101,80 @@ export class FlexMode extends BaseMode {
         const embedContainer = $(`#${id}`).find('.embeds');
         embedContainer.html('');
         if (this.options.allowEmbeds) {
-            for(let embed of embeds) {
-                let videoURL = null;
-                let thumbnailURL = null;
 
-                // Determine the elements urls.
-                // If we dont have the data object, we need to be in compat' mode
-                if (!embed.data) {
-                    // We have to use backwards compatability with d.js 13
-                    console.warn("Failed to get any data from the embed");
-                    continue;
-                } else {
-                    const { video, thumbnail } = embed.data;
-                    if (video) 
-                        videoURL = video.proxy_url;
-                    if (thumbnail) 
-                        thumbnailURL = thumbnail.proxy_url;
-                }
+            // Add the embed display
+            if (embeds) {
+                for(let embed of embeds) {
+                    if (embed == null) continue;
+                    let videoURL = null;
+                    let thumbnailURL = null;
 
-                // Create the elemends
-                if (videoURL) {
-                    if (this.options.allowVideos) {
-                        $(`<video autoplay loop muted src="${videoURL}"></video>`)
-                            .one('play', () => { this.scroll(); })
+                    // Determine the elements urls.
+                    // If we dont have the data object, we need to be in compat' mode
+                    if (!embed.data) {
+                        // We have to use backwards compatability with d.js 13
+                        console.warn("Failed to get any data from the embed");
+                        continue;
+                    } else {
+                        const { video, thumbnail } = embed.data;
+                        if (video) 
+                            videoURL = video.proxy_url;
+                        if (thumbnail) 
+                            thumbnailURL = thumbnail.proxy_url;
+                    }
+
+                    // Create the elemends
+                    if (videoURL) {
+                        if (this.options.allowVideos) {
+                            $(`<video autoplay loop muted src="${videoURL}"></video>`)
+                                .one('play', () => { this.scroll(); })
+                                .appendTo(embedContainer);
+                            foundEmbed = true;
+                        }
+                    } else if (thumbnailURL) {
+                        $(`<img src="${thumbnailURL}"></img>`)
+                            .one('load', () => { this.scroll(); })
                             .appendTo(embedContainer);
                         foundEmbed = true;
+                    } else {
+                        console.warn("Failed to create the embed as it doesnt contain a video or thumbnail:", embed);
                     }
-                } else if (thumbnailURL) {
-                    $(`<img src="${thumbnailURL}"></img>`)
-                        .one('load', () => { this.scroll(); })
-                        .appendTo(embedContainer);
-                    foundEmbed = true;
-                } else {
-                    console.warn("Failed to create the embed as it doesnt contain a video or thumbnail:", embed);
+                }
+            }
+
+            // Add the attatchment display
+            if (attachments) {
+                for(let attachment of attachments) {
+                    if (attachment == null) continue;
+
+                    switch(attachment.type) {
+                        case 'image/jpeg':
+                        case 'image/png':
+                        case 'image/bitmap':
+                        case 'image/gif':
+                        case 'image/webm':
+                            $(`<img src="${attachment.url}" alt="${attachment.description ?? ''}" title="${attachment.title ?? ''}"></img>`)
+                                .one('load', () => { this.scroll(); })
+                                .appendTo(embedContainer);
+                            foundEmbed = true;
+                            break;
+
+                        case 'video/webm':
+                        case 'video/mp4':
+                            if (this.options.allowVideos) {
+                                $(`<video autoplay loop muted src="${attachment.url}" alt="${attachment.description ?? ''}" title="${attachment.title ?? ''}"></video>`)
+                                    .one('play', () => { this.scroll(); })
+                                    .appendTo(embedContainer);
+                                foundEmbed = true;
+                            }
+                            break;
+
+                        default:
+                            $(`<div class="attachment" data-type="${attachment.type}"><div class="icon file"></div><span class="title">${attachment.title}</span><span class="description">${attachment.description ?? ''}</span></div>`)
+                                .appendTo(embedContainer);
+                            foundEmbed = true;
+                            break;
+                    }
                 }
             }
         }
